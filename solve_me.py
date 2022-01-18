@@ -77,27 +77,113 @@ $ python tasks.py runserver # Starts the tasks management server"""
         )
 
     def add(self, args):
-        pass  # Use your existing implementation
+        priority, task = int(args[0]), args[1]
+        if priority not in self.current_items:
+            self.current_items[priority] = task
+        else:
+            _priority, _task = priority, task
+            task_priorities = sorted(self.current_items.keys())
+            i = task_priorities.index(priority)
+            for key in task_priorities[i:]:
+                if key == _priority:
+                    temp_task = self.current_items[key]
+                    self.current_items[key] = _task
+                    _task = temp_task
+                    _priority += 1
+                else:
+                    self.current_items[_priority] = temp_task
+                    break
+            else:
+                self.current_items[_priority] = temp_task
+        self.write_current()
+        print(f'Added task: "{task}" with priority {priority}')
 
     def done(self, args):
-        pass  # Use your existing implementation
+        priority = int(args[0])
+        try:
+            self.completed_items.append(self.current_items[priority])
+            del self.current_items[priority]
+            self.write_current()
+            self.write_completed()
+            print("Marked item as done.")
+        except KeyError:
+            print(f"Error: no incomplete item with priority {priority} exists.")
 
     def delete(self, args):
-        pass  # Use your existing implementation
+        priority = int(args[0])
+        try:
+            del self.current_items[priority]
+            print(f"Deleted item with priority {priority}")
+            self.write_current()
+        except KeyError:
+            print(
+                f"Error: item with priority {priority} does not exist. Nothing deleted."
+            )
 
     def ls(self):
-        pass  # Use your existing implementation
+        for i, key in enumerate(sorted(self.current_items.keys())):
+            print(f"{i+1}. {self.current_items[key]} [{key}]")
 
     def report(self):
-        pass  # Use your existing implementation
+        print("Pending :", len(self.current_items))
+        for i, key in enumerate(sorted(self.current_items.keys())):
+            print(f"{i+1}. {self.current_items[key]} [{key}]")
+        print("\nCompleted :", len(self.completed_items))
+        for i, item in enumerate(self.completed_items):
+            print(f"{i+1}. {item}")
+
+    def _html_style(self):
+        return """
+        <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 15px;
+        }
+        </style>
+        """
 
     def render_pending_tasks(self):
-        # Complete this method to return all incomplete tasks as HTML
-        return "<h1> Show Incomplete Tasks Here </h1>"
+        self.read_current()
+        table_header = """
+        <table>
+            <tr>
+                <th>Index</th>
+                <th>Priority</th>
+                <th>Task</th>
+            </tr>
+        """
+        table_footer = "</table>"
+        table_rows = ""
+        for i, key in enumerate(sorted(self.current_items.keys())):
+            table_rows += f"""
+            <tr>
+                <th>{i+1}</th>
+                <td>{key}</td>
+                <td>{self.current_items[key]}</td>
+            </tr>
+            """
+        return self._html_style() + table_header + table_rows + table_footer
 
     def render_completed_tasks(self):
-        # Complete this method to return all completed tasks as HTML
-        return "<h1> Show Completed Tasks Here </h1>"
+        self.read_completed()
+        table_header = """
+        <table>
+            <tr>
+                <th>Index</th>
+                <th>Task</th>
+            </tr>
+        """
+        table_footer = "</table>"
+        table_rows = ""
+        for i, item in enumerate(self.completed_items):
+            table_rows += f"""
+            <tr>
+                <th>{i+1}</th>
+                <td>{item}</td>
+            </tr>
+            """
+        return self._html_style() + table_header + table_rows + table_footer
 
 
 class TasksServer(TasksCommand, BaseHTTPRequestHandler):
