@@ -8,6 +8,8 @@
 <h1>Tasks</h1>
 {% for task in tasks %}
     <div>
-        {{forloop.counter}} . {{ task }} <a href="/delete-task/{{ forloop.counter }}">delete task</a>
+        {{forloop.counter}} . {{ task }} 
+        <a href="/delete-task/{{ forloop.counter }}">delete task</a>
+        <a href="/complete_task/{{ forloop.counter }}">complete task</a>
     </div>
 {% endfor %}
