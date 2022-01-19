@@ -6,26 +6,26 @@
 </form>
 
 <form action="" method="get">
-    <input type="text" name="search">
+    <input type="text" name="search" value="{{ search_query }}">
     <button type="submit">Search</button>
 </form>
 
 <h1>Tasks</h1>
 {% for task in tasks %}
-    <div>
-        {{forloop.counter}}. {{ task.title }}
-        <a href="/delete-task/{{ task.id }}">Delete</a>
-        <a href="/complete_task/{{ task.id }}">Complete</a>
-        <p>
-            {{ task.description }}
-        </p>
-    </div>
+<div>
+    {{forloop.counter}}. {{ task.title }}
+    <a href="/delete-task/{{ task.id }}">Delete</a>
+    <a href="/complete_task/{{ task.id }}">Complete</a>
+    <p>
+        {{ task.description }}
+    </p>
+</div>
 {% endfor %}
 
 <h1>Completed Tasks</h1>
 
 {% for task in completed_tasks %}
-    <div>
-        {{ task }}
-    </div>
+<div>
+    {{ task }}
+</div>
 {% endfor %}
