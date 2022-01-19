@@ -1,0 +1,23 @@
+<h1>Tasks Management Application</h1>
+
+<form action="/add-task" method="get">
+    <input type="text" name="task">
+    <button type="submit">Add Task</button>
+</form>
+
+<form action="" method="get">
+    <input type="text" name="search">
+    <button type="submit">Search</button>
+</form>
+
+<h1>Tasks</h1>
+{% for task in tasks %}
+    <div>
+        {{forloop.counter}}. {{ task.title }}
+        <a href="/delete-task/{{ task.id }}">Delete</a>
+        <a href="/complete_task/{{ task.id }}">Complete</a>
+        <p>
+            {{ task.description }}
+        </p>
+    </div>
+{% endfor %}
