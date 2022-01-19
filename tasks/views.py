@@ -12,9 +12,9 @@ completed_tasks = []
 def all_tasks_view(request):
     search_task = request.GET.get("search")
     all_tasks = Task.objects.all().filter(deleted=False)
-    tasks = all_tasks.filter(completed=False)
     if search_task:
-        tasks = tasks.filter(title__icontains=search_task)
+        all_tasks = all_tasks.filter(title__icontains=search_task)
+    tasks = all_tasks.filter(completed=False)
     completed_tasks = all_tasks.filter(completed=True)
     return render(
         request,
