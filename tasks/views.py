@@ -22,7 +22,6 @@ def all_tasks_view(request):
         {
             "tasks": tasks,
             "completed_tasks": completed_tasks,
-            "search_query": search_task,
         },
     )
 

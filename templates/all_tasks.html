@@ -6,7 +6,7 @@
 </form>
 
 <form action="" method="get">
-    <input type="text" name="search" value="{{ search_query }}">
+    <input type="text" name="search" value="{{ request.GET.search }}">
     <button type="submit">Search</button>
 </form>
 
