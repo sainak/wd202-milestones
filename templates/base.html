@@ -1,4 +1,4 @@
-{% load static %}
+{% load static tailwind_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}{{ title|yesno:' | ,' }}Todo Manager</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
-    {% block extra_head %}{% endblock %}
+    {% tailwind_css %}
     {% include "base_styles.html" %}
+    {% block extra_head %}{% endblock %}
 </head>
 <body style="min-height:100vh;">
     {% block content_body %}
