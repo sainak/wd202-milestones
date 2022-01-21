@@ -2,7 +2,7 @@
 
 {% block content_body %}
 
-<div class="flex h-screen justify-center items-center">
+<div class="flex justify-center items-center">
   <div class="sm:w-96 w-full px-3">
     <h1 class="text-4xl p-2 font-black mb-12">Todo manager</h1>
     <h3 class="text-xl p-3 mb-4">Signup</h3>
@@ -46,16 +46,17 @@
           </span>
           <span class="mt-1 text-xs text-gray-600">Enter the same password as before, for verification.</span>
         </div>
+        <span class="form-error">
+          {% for error in form.non_field_errors %}
+          <p class="p-4"> {{ error }} </p>
+          {% endfor %}
+        </span>
 
         <div class="col-span-12">
           <button type="submit" class="btn-primary">Signup</button>
         </div>
+        <p class="col-span-12 text-center"><a href="{% url 'login' %}" class="btn">Already have an account? Login.</a></p>
       </div>
-      <span class="form-error">
-        {% for error in form.non_field_errors %}
-        <p class="p-4"> {{ error }} </p>
-        {% endfor %}
-      </span>
     </form>
   </div>
 </div>
