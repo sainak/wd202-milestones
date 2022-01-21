@@ -2,23 +2,60 @@
 
 
 {% block content_body %}
-<div class="d-flex justify-content-center align-items-center">
-  <div class="card shadow container-fixed container-fixed-md mt-0 mt-sm-4">
-    {% if form.instance.id %}
-      <h1>Update Todo</h1>
-    {% else %}
-      <h1>Create Todo</h1>
-    {% endif %}
-    <form class="p-3" action="" method="post">
-      {% csrf_token %}
-      
-      {{ form.as_p }}
-      <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary ">
-          <i class="fa fa-save"></i> &nbsp; SAVE
-        </button>
+
+
+<form method="post">
+  <div class="flex flex-col h-screen items-center">
+    <div class="sm:w-96 w-full px-3">
+      <div class="flex items-center mb-4 mt-10 content-center">
+        <h1 class="text-4xl font-black ">
+          {% if form.instance.id %}
+          Update Todo
+          {% else %}
+          Create Todo
+          {% endif %}
+        </h1>
       </div>
-    </form>
+
+      {% csrf_token %}
+      <div class="mt-16 grid gap-6 ">
+        <div class="col-span-12">
+          <label for="id_title">Title</label>
+          <input
+            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+            type="text" name="title" maxlength="100" id="id_title" required autofocus>
+          <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+            {{ form.title.errors.as_text }}
+          </span>
+        </div>
+        <div class="col-span-12">
+          <label for="id_description">Description</label>
+          <textarea
+            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+            name="description" id="id_description" rows=8></textarea>
+          <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+            {{ form.description.errors.as_text }}
+          </span>
+        </div>
+        <div class="col-span-12">
+          <input
+            class="mr-2 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-5 h-5 shadow-sm text-red-600 border-gray-300 focus:ring-3 rounded"
+            type="checkbox" name="completed" id="id_completed">
+          <label for="id_completed">Completed</label>
+          <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+            {{ form.completed.errors.as_text }}
+          </span>
+        </div>
+      </div>
+      {% for error in form.non_field_errors %}
+      <p class="p-4"> {{ error }} </p>
+      {% endfor %}
+    </div>
+    <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
+      <button
+        class="block w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 text-center"
+        type="submit">Save</button>
+    </div>
   </div>
-</div>
+</form>
 {% endblock %}
