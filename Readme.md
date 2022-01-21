@@ -31,3 +31,11 @@ Once all the required features are implemented, push the code to a GitHub reposi
 ## Help
 
 To understand how querysets can be ordered take a look [here](https://docs.djangoproject.com/en/3.2/ref/models/querysets/#order-by) , you can use the exists method to check if an object already exists in the database, the exists method is documented [here](https://docs.djangoproject.com/en/3.2/ref/models/querysets/#django.db.models.query.QuerySet.exists)
+
+
+## Usage
+```
+pipenv install
+pipenv run python manage.py tailwind start
+pipenv run python manage.py runserver
+```
