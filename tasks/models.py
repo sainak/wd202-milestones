@@ -7,6 +7,7 @@ class Task(models.Model):
     description = models.TextField(blank=True)
     completed = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now=True)
+    priority = models.IntegerField()
     deleted = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 

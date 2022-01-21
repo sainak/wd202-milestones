@@ -34,6 +34,13 @@
           </span>
         </div>
         <div class="col-span-12">
+          <label for="id_priority">Priority</label>
+          {{ form.priority }}
+          <span class="form-error">
+            {{ form.priority.errors.as_text }}
+          </span>
+        </div>
+        <div class="col-span-12">
           {{ form.completed }}
           <label for="id_completed">Completed</label>
           <span class="form-error">
