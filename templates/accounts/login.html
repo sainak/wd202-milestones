@@ -2,14 +2,39 @@
 
 {% block content_body %}
 
-<h1>Todo Manager</h1>
+<div class="flex h-screen justify-center items-center">
+    <div class="sm:w-96 w-full px-3">
+        <h1 class="text-4xl p-2 font-black mb-12">Todo manager</h1>
+        <h3 class="text-xl p-3 mb-4">Login</h3>
+        <form class="p-3" action="" method="post">
+            {% csrf_token %}
 
-<h3>Signup</h3>
+            <div class="grid gap-6 ">
+                <div class="col-span-12">
+                    <label for="id_username">Username</label>
+                    <input type="text" name="username" id="id_username" autocomplete="username"
+                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+                        required autofocus>
+                </div>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit"> Login </button>
-</form>
+                <div class="col-span-12">
+                    <label for="id_password">Password</label>
+                    <input type="password" name="password" autocomplete="current-password" id="id_password"
+                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+                        required>
+                </div>
+
+                <div class="col-span-12">
+                    <button type="submit"
+                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-2.5 w-full text-center">Login</button>
+                </div>
+            </div>
+            {% for error in form.non_field_errors %}
+            <p class="p-4"> {{ error }} </p>
+            {% endfor %}
+
+        </form>
+    </div>
+</div>
 
 {% endblock content_body %}
