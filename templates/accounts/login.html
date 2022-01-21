@@ -12,21 +12,22 @@
             <div class="grid gap-6 ">
                 <div class="col-span-12">
                     <label for="id_username">Username</label>
-                    <input type="text" name="username" id="id_username" autocomplete="username"
-                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm bg-pgray border-gray-300 rounded-lg"
-                        required autofocus>
+                    {{ form.username }}
+                    <span class="form-error">
+                        {{ form.username.errors.as_text }}
+                    </span>
                 </div>
 
                 <div class="col-span-12">
                     <label for="id_password">Password</label>
-                    <input type="password" name="password" autocomplete="current-password" id="id_password"
-                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm bg-pgray border-gray-300 rounded-lg"
-                        required>
+                    {{ form.password }}
+                    <span class="form-error">
+                        {{ form.password.errors.as_text }}
+                    </span>
                 </div>
 
                 <div class="col-span-12">
-                    <button type="submit"
-                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 w-full text-center">Login</button>
+                    <button type="submit" class="btn-primary">Login</button>
                 </div>
             </div>
             {% for error in form.non_field_errors %}

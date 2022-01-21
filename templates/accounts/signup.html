@@ -12,10 +12,8 @@
             <div class="grid gap-6 ">
                 <div class="col-span-12">
                     <label for="id_username">Username</label>
-                    <input type="text" name="username" id="id_username" autocomplete="username"
-                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
-                        required autofocus>
-                    <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    {{ form.username }}
+                    <span class="form-error">
                         {{ form.username.errors.as_text }}
                     </span>
                     <span class="mt-1 text-xs text-gray-600">Required. 150 characters or fewer. Letters, digits and
@@ -25,9 +23,8 @@
 
                 <div class="col-span-12">
                     <label for="id_password1">Password</label>
-                    <input type="password" name="password1" autocomplete="current-password" id="id_password1" required
-                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
-                    <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    {{ form.password1 }}
+                    <span class="form-error">
                         {{ form.password1.errors.as_text }}
                     </span>
                     <span class="text-xs text-gray-600">
@@ -43,21 +40,18 @@
 
                 <div class="col-span-12">
                     <label for="id_password2">Confirm Password</label>
-                    <input type="password" name="password2" autocomplete="current-password" id="id_password2" required
-                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
-                    <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    {{ form.password2 }}
+                    <span class="form-error">
                         {{ form.password2.errors.as_text }}
                     </span>
-
                     <span class="mt-1 text-xs text-gray-600">Enter the same password as before, for verification.</span>
                 </div>
 
                 <div class="col-span-12">
-                    <button type="submit"
-                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 w-full text-center">Signup</button>
+                    <button type="submit" class="btn-primary">Signup</button>
                 </div>
             </div>
-            <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+            <span class="form-error">
                 {% for error in form.non_field_errors %}
                 <p class="p-4"> {{ error }} </p>
                 {% endfor %}
