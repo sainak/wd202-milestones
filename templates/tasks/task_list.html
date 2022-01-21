@@ -19,7 +19,7 @@
         href="{% url 'tasks-list' %}?status=completed">Completed</a>
     </div>
 
-    <div class="grid gap-3">
+    <div class="grid gap-3 mb-4">
       {% for task in tasks %}
       <div class="flex items-center card bg-pgray rounded-[16px] py-4 px-6">
         <h1 class="block text-4xl text-gray-600 mr-2">
@@ -53,11 +53,14 @@
         </a>
       </div>
       {% endfor %}
+
     </div>
   </div>
-  <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
-    <a class="block w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 text-center"
-      href="{% url 'tasks-create' %}">Add Task</a>
+  <div class="sm:w-96 w-full px-3 mt-auto">
+    {% include 'base_paginator.html' %}
+  </div>
+  <div class="sm:w-96 w-full px-3 mt-4 mb-10 ">
+    <a class="btn-primary" href="{% url 'tasks-create' %}">Add Task</a>
   </div>
 </div>
 

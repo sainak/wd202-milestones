@@ -21,7 +21,7 @@ class BaseTaskView(ObjectOwnerMixin):
 
 
 class TaskListView(BaseTaskView, ListView):
-    paginate_by = 10
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

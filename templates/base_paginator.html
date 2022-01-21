@@ -1,0 +1,45 @@
+
+<div class="flex items-center justify-center space-x-1">
+  <a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}"
+    class="flex items-center px-4 py-2 text-gray-500 bg-gray-300 rounded-md">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+    </svg>
+  </a>
+
+  {% if page_obj.number|add:'-1' > 1 %}
+  <a href="?page={{ page_obj.number|add:'-2' }}" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white">
+    &hellip;
+  </a>
+  {% endif %}
+
+
+  {% for i in page_obj.paginator.page_range %}
+    {% if page_obj.number == i %}
+    <span class="px-4 py-2 text-gray-700 bg-blue-300 rounded-md hover:bg-blue-400 hover:text-white">
+      {{ i }}
+    </span>
+    {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
+      <a href="?page={{ i }}" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white">
+        {{ i }}
+      </a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
+      <a href="?page={{ page_obj.number|add:'2' }}" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white">
+        &hellip;
+      </a>
+  {% endif %}
+
+
+  <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% endif %}"
+    class="px-4 py-2 text-gray-500 bg-gray-300 rounded-md hover:bg-blue-400 hover:text-white">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+    </svg>
+  </a>
+</div>
+
+
+
