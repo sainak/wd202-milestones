@@ -13,7 +13,7 @@
     .form-error {
         @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
     }
-    .btn-primary{
+    .btn-primary {
       @apply block w-full rounded-lg px-5 py-3 text-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 
     }
   }

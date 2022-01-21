@@ -41,6 +41,12 @@ module.exports = {
          */
         // '../../**/*.py'
     ],
+    safelist: [
+        'form-control',
+        'form-check-input',
+        'form-error',
+        'btn-primary',
+    ],
     theme: {
         extend: {
             colors:{
