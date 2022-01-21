@@ -22,7 +22,7 @@
         <div class="col-span-12">
           <label for="id_title">Title</label>
           <input
-            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm bg-pgray border-gray-300 rounded-lg"
             type="text" name="title" maxlength="100" id="id_title" required autofocus>
           <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
             {{ form.title.errors.as_text }}
@@ -31,7 +31,7 @@
         <div class="col-span-12">
           <label for="id_description">Description</label>
           <textarea
-            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+            class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm bg-pgray border-gray-300 rounded-lg"
             name="description" id="id_description" rows=8></textarea>
           <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
             {{ form.description.errors.as_text }}
@@ -39,7 +39,7 @@
         </div>
         <div class="col-span-12">
           <input
-            class="mr-2 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-5 h-5 shadow-sm text-red-600 border-gray-300 focus:ring-3 rounded"
+            class="mr-2 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-5 h-5 shadow-sm text-red-600 bg-pgray border-gray-300 focus:ring-3 rounded"
             type="checkbox" name="completed" id="id_completed">
           <label for="id_completed">Completed</label>
           <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">

@@ -13,7 +13,7 @@
                 <div class="col-span-12">
                     <label for="id_username">Username</label>
                     <input type="text" name="username" id="id_username" autocomplete="username"
-                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
+                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg"
                         required autofocus>
                     <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                         {{ form.username.errors.as_text }}
@@ -26,7 +26,7 @@
                 <div class="col-span-12">
                     <label for="id_password1">Password</label>
                     <input type="password" name="password1" autocomplete="current-password" id="id_password1" required
-                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
+                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
                     <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                         {{ form.password1.errors.as_text }}
                     </span>
@@ -44,7 +44,7 @@
                 <div class="col-span-12">
                     <label for="id_password2">Confirm Password</label>
                     <input type="password" name="password2" autocomplete="current-password" id="id_password2" required
-                        class="mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
+                        class="bg-pgray mt-1 focus:ring-red-300 focus:ring-4 focus:border-red-300 w-full shadow-sm sm:text-sm border-gray-300 rounded-lg">
                     <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                         {{ form.password2.errors.as_text }}
                     </span>
@@ -54,7 +54,7 @@
 
                 <div class="col-span-12">
                     <button type="submit"
-                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-2.5 w-full text-center">Signup</button>
+                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 w-full text-center">Signup</button>
                 </div>
             </div>
             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">

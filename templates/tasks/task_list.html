@@ -22,7 +22,7 @@
 
         <div class="grid gap-3">
             {% for task in tasks %}
-            <div class="flex items-center card bg-gray-200 rounded-[16px] py-4 px-6">
+            <div class="flex items-center card bg-pgray rounded-[16px] py-4 px-6">
                 <div class="grid">
                     <div
                         class="text-lg text-black {{ task.completed|yesno:' text-red-600 line-through , text-black ' }}">
