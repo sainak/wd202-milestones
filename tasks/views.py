@@ -14,7 +14,7 @@ from .models import Task
 
 class BaseTaskView(ObjectOwnerMixin):
     model = Task
-    queryset = Task.objects.filter(deleted=False)
+    queryset = Task.objects.filter(deleted=False).order_by("-priority")
     form_class = TaskForm
     context_object_name = "tasks"
     success_url = "/tasks/"
