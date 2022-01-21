@@ -3,61 +3,59 @@
 {% block content_body %}
 
 <div class="flex flex-col h-screen items-center">
-    <div class="sm:w-96 w-full px-3">
-        <div class="flex items-center mb-4 mt-10 content-center">
-            <h1 class="text-4xl font-black ">Hi, {{ request.user.username }}</h1>
-            <a class="ml-auto text-red-500 font-medium" href="{% url 'logout' %}"> Log out</a>
-        </div>
-        <h4 class="text-gray-600 text-sm">
-            {{ completed_tasks }} of {{ total_tasks }} tasks completed
-        </h4>
-
-        <div class="flex my-3 mx-1 justify-between font-semibold">
-            <a class="px-6 py-1.5 rounded-full" id="tab_all" href="{% url 'tasks-list' %}">All</a>
-            <a class="px-6 py-1.5 rounded-full" id="tab_pending"
-                href="{% url 'tasks-list' %}?status=pending">Pending</a>
-            <a class="px-6 py-1.5 rounded-full" id="tab_completed"
-                href="{% url 'tasks-list' %}?status=completed">Completed</a>
-        </div>
-
-        <div class="grid gap-3">
-            {% for task in tasks %}
-            <div class="flex items-center card bg-pgray rounded-[16px] py-4 px-6">
-                <div class="grid">
-                    <div
-                        class="text-lg text-black {{ task.completed|yesno:' text-red-600 line-through , text-black ' }}">
-                        {{ task.title }}
-                    </div>
-                    <div class="text-gray-600 text-sm">
-                        {{ task.created_date }}
-                    </div>
-                </div>
-                <a class="ml-auto" href="{% url 'tasks-update' task.id %}">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="8" fill="#2DD4BF" />
-                        <path
-                            d="M24.1667 12.5C24.3856 12.2811 24.6455 12.1075 24.9314 11.9891C25.2174 11.8706 25.5239 11.8096 25.8334 11.8096C26.1429 11.8096 26.4494 11.8706 26.7354 11.9891C27.0214 12.1075 27.2812 12.2811 27.5001 12.5C27.719 12.7189 27.8926 12.9787 28.011 13.2647C28.1295 13.5506 28.1904 13.8571 28.1904 14.1667C28.1904 14.4762 28.1295 14.7827 28.011 15.0687C27.8926 15.3546 27.719 15.6145 27.5001 15.8333L16.2501 27.0833L11.6667 28.3333L12.9167 23.75L24.1667 12.5Z"
-                            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <a class="ml-2" href="{% url 'tasks-delete' task.id %}">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="8" fill="#F43F5E" />
-                        <path d="M12.5 15H14.1667H27.5" stroke="white" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <path
-                            d="M16.6667 15V13.3333C16.6667 12.8913 16.8423 12.4674 17.1549 12.1548C17.4675 11.8423 17.8914 11.6667 18.3334 11.6667H21.6667C22.1088 11.6667 22.5327 11.8423 22.8453 12.1548C23.1578 12.4674 23.3334 12.8913 23.3334 13.3333V15M25.8334 15V26.6667C25.8334 27.1087 25.6578 27.5326 25.3453 27.8452C25.0327 28.1577 24.6088 28.3333 24.1667 28.3333H15.8334C15.3914 28.3333 14.9675 28.1577 14.6549 27.8452C14.3423 27.5326 14.1667 27.1087 14.1667 26.6667V15H25.8334Z"
-                            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+  <div class="sm:w-96 w-full px-3">
+    <div class="flex items-center mb-4 mt-10 content-center">
+      <h1 class="text-4xl font-black ">Hi, {{ request.user.username }}</h1>
+      <a class="ml-auto text-red-500 font-medium" href="{% url 'logout' %}"> Log out</a>
     </div>
-    <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
-        <a class="block w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 text-center"
-            href="{% url 'tasks-create' %}">Add Task</a>
+    <h4 class="text-gray-600 text-sm">
+      {{ completed_tasks }} of {{ total_tasks }} tasks completed
+    </h4>
+
+    <div class="flex my-3 mx-1 justify-between font-semibold">
+      <a class="px-6 py-1.5 rounded-full" id="tab_all" href="{% url 'tasks-list' %}">All</a>
+      <a class="px-6 py-1.5 rounded-full" id="tab_pending" href="{% url 'tasks-list' %}?status=pending">Pending</a>
+      <a class="px-6 py-1.5 rounded-full" id="tab_completed"
+        href="{% url 'tasks-list' %}?status=completed">Completed</a>
     </div>
+
+    <div class="grid gap-3">
+      {% for task in tasks %}
+      <div class="flex items-center card bg-pgray rounded-[16px] py-4 px-6">
+        <div class="grid">
+          <div class="text-lg text-black {{ task.completed|yesno:' text-red-600 line-through , text-black ' }}">
+            {{ task.title }}
+          </div>
+          <div class="text-gray-600 text-sm">
+            {{ task.created_date }}
+          </div>
+        </div>
+        <a class="ml-auto" href="{% url 'tasks-update' task.id %}">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="#2DD4BF" />
+            <path
+              d="M24.1667 12.5C24.3856 12.2811 24.6455 12.1075 24.9314 11.9891C25.2174 11.8706 25.5239 11.8096 25.8334 11.8096C26.1429 11.8096 26.4494 11.8706 26.7354 11.9891C27.0214 12.1075 27.2812 12.2811 27.5001 12.5C27.719 12.7189 27.8926 12.9787 28.011 13.2647C28.1295 13.5506 28.1904 13.8571 28.1904 14.1667C28.1904 14.4762 28.1295 14.7827 28.011 15.0687C27.8926 15.3546 27.719 15.6145 27.5001 15.8333L16.2501 27.0833L11.6667 28.3333L12.9167 23.75L24.1667 12.5Z"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <a class="ml-2" href="{% url 'tasks-delete' task.id %}">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="#F43F5E" />
+            <path d="M12.5 15H14.1667H27.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M16.6667 15V13.3333C16.6667 12.8913 16.8423 12.4674 17.1549 12.1548C17.4675 11.8423 17.8914 11.6667 18.3334 11.6667H21.6667C22.1088 11.6667 22.5327 11.8423 22.8453 12.1548C23.1578 12.4674 23.3334 12.8913 23.3334 13.3333V15M25.8334 15V26.6667C25.8334 27.1087 25.6578 27.5326 25.3453 27.8452C25.0327 28.1577 24.6088 28.3333 24.1667 28.3333H15.8334C15.3914 28.3333 14.9675 28.1577 14.6549 27.8452C14.3423 27.5326 14.1667 27.1087 14.1667 26.6667V15H25.8334Z"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
+    <a class="block w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 rounded-lg px-5 py-3 text-center"
+      href="{% url 'tasks-create' %}">Add Task</a>
+  </div>
 </div>
 
 {% endblock content_body %}
@@ -65,10 +63,10 @@
 
 {% block extra_scripts %}
 <script type="text/javascript">
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    let activeTab = document.querySelector(`#tab_${status ? status : 'all'}`);
-    activeTab.classList.add('text-red-600', 'bg-red-200');
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  let activeTab = document.querySelector(`#tab_${status ? status : 'all'}`);
+  activeTab.classList.add('text-red-600', 'bg-red-200');
 
 </script>
 {% endblock %}

@@ -25,9 +25,7 @@ class TaskListView(BaseTaskView, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["completed_tasks"] = (
-            self.queryset.filter(completed=True).count()
-        )
+        context_data["completed_tasks"] = self.queryset.filter(completed=True).count()
         context_data["total_tasks"] = self.queryset.count()
         return context_data
 

@@ -15,4 +15,3 @@ class ObjectOwnerMixin(LoginRequiredMixin):
         if self.request.POST.get("confirm_delete") is None:
             form.instance.user = self.request.user
         return super().form_valid(form)
-
