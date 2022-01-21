@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}{{ title|yesno:' | ,' }}Todo Manager</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+    {% block extra_head %}{% endblock %}
+    {% include "base_styles.html" %}
+</head>
+<body style="min-height:100vh;">
+    {% block content_body %}
+    {% endblock content_body %}
+
+    {% include "base_scripts.html" %}
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

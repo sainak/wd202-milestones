@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content_body %}
+
+Hi, {{ request.user.username }} <a href="{% url 'logout' %}">logout</a>
+
+{{ completed_tasks }} of {{ total_tasks }} Tasks completed
+
+<br>
+<br>
+<a id="tab_all" href="{% url 'tasks-list' %}">all</a>
+<a id="tab_completed" href="{% url 'tasks-list' %}?status=completed">completed</a>
+<a id="tab_pendiing" href="{% url 'tasks-list' %}?status=pending">pending</a>
+
+<h1>Tasks</h1>
+{% for task in tasks %}
+    <div>
+        {{forloop.counter}}. {{ task.title }}
+        <a href="{% url 'tasks-delete' task.id %}">Delete</a>
+        <a href="{% url 'tasks-update' task.id %}">Edit</a>
+        <p>
+            {{ task.description }}
+        </p>
+    </div>
+{% endfor %}
+
+<a href="{% url 'tasks-create' %}"> Add Task</a>
+
+{% endblock content_body %}
+
+
+{% block extra_scripts %}
+<script type="text/javascript">
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  console.log(status);
+
+</script>
+{% endblock %}

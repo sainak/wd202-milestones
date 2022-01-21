@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content_body %}
+
+<h1>Todo Manager</h1>
+
+<h3>Login</h3>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit"> Signup </button>
+</form>
+
+
+
+{% endblock content_body %}
