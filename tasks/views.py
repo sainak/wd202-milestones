@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.forms import Form
 from django.http import HttpResponseRedirect
 from django.views.generic import (
@@ -11,7 +12,7 @@ from django.views.generic import (
 from .forms import TaskForm
 from .mixins import ObjectOwnerMixin
 from .models import Task
-from django.db import transaction
+
 
 class BaseTaskView(ObjectOwnerMixin):
     model = Task
@@ -27,9 +28,11 @@ class BaseTaskView(ObjectOwnerMixin):
 
         form.instance.user = self.request.user
         _priority = form.instance.priority
-        tasks = Task.objects.filter(
-            priority__gte=_priority, deleted=False, completed=False
-        ).exclude(pk=form.instance.id).order_by("priority")
+        tasks = (
+            Task.objects.filter(priority__gte=_priority, deleted=False, completed=False)
+            .exclude(pk=form.instance.id)
+            .order_by("priority")
+        )
         bulk = []
         for task in tasks:
             if task.priority > _priority:
