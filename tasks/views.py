@@ -26,15 +26,16 @@ class BaseTaskView(ObjectOwnerMixin):
 
         form.instance.user = self.request.user
         _priority = form.instance.priority
-        tasks = Task.objects.filter(priority__gte=_priority, deleted=False).order_by(
-            "priority"
-        )
+        tasks = Task.objects.filter(
+            priority__gte=_priority, deleted=False, completed=False
+        ).order_by("priority")
         bulk = []
         for task in tasks:
             if task.priority != _priority:
                 break
             _priority = task.priority = task.priority + 1
             bulk.append(task)
+
         if bulk:
             Task.objects.bulk_update(bulk, ["priority"], batch_size=100)
         return super().form_valid(form)
