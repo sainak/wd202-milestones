@@ -25,15 +25,17 @@
             {{ form.password.errors.as_text }}
           </span>
         </div>
+        <span class="form-error">
+          {% for error in form.non_field_errors %}
+          <p class="p-4"> {{ error }} </p>
+          {% endfor %}
+        </span>
 
         <div class="col-span-12">
           <button type="submit" class="btn-primary">Login</button>
         </div>
+        <p class="col-span-12 text-center"><a href="{% url 'signup' %}" class="btn">Don't have an account? Signup.</a></p>
       </div>
-      {% for error in form.non_field_errors %}
-      <p class="p-4"> {{ error }} </p>
-      {% endfor %}
-
     </form>
   </div>
 </div>
