@@ -18,20 +18,3 @@ class TaskForm(forms.ModelForm):
             "priority": forms.NumberInput(attrs={"class": "form-control"}),
             "completed": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
-
-    def increment_priority(self, task):
-        clash = (
-            Task.objects.filter(priority=task.priority + 1).exclude(pk=task.pk).first()
-        )
-        if clash:
-            self.increment_priority(clash)
-        task.priority += 1
-        task.save()
-
-    def save(self, commit=True):
-        clash = Task.objects.filter(
-            user=self.instance.user, priority=self.instance.priority
-        ).first()
-        if clash:
-            self.increment_priority(clash)
-        return super().save(commit)

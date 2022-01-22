@@ -19,6 +19,26 @@ class BaseTaskView(ObjectOwnerMixin):
     context_object_name = "tasks"
     success_url = "/tasks/"
 
+    def form_valid(self, form):
+        # if its delete, we don't need to set the user or perform increments
+        if self.request.POST.get("confirm_delete") is not None:
+            return super().form_valid(form)
+
+        form.instance.user = self.request.user
+        _priority = form.instance.priority
+        tasks = Task.objects.filter(priority__gte=_priority, deleted=False).order_by(
+            "priority"
+        )
+        bulk = []
+        for task in tasks:
+            if task.priority != _priority:
+                break
+            _priority = task.priority = task.priority + 1
+            bulk.append(task)
+        if bulk:
+            Task.objects.bulk_update(bulk, ["priority"], batch_size=100)
+        return super().form_valid(form)
+
 
 class TaskListView(BaseTaskView, ListView):
     paginate_by = 5
@@ -33,9 +53,9 @@ class TaskListView(BaseTaskView, ListView):
         queryset = super().get_queryset()
         status = self.request.GET.get("status")
         if status == "completed":
-            return queryset.filter(completed=True)
+            queryset = queryset.filter(completed=True)
         elif status == "pending":
-            return queryset.filter(completed=False)
+            queryset = queryset.filter(completed=False)
         return queryset
 
 
