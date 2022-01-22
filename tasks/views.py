@@ -1,4 +1,5 @@
 from django.forms import Form
+from django.http import HttpResponseRedirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -10,7 +11,7 @@ from django.views.generic import (
 from .forms import TaskForm
 from .mixins import ObjectOwnerMixin
 from .models import Task
-
+from django.db import transaction
 
 class BaseTaskView(ObjectOwnerMixin):
     model = Task
@@ -35,10 +36,11 @@ class BaseTaskView(ObjectOwnerMixin):
                 break
             _priority = task.priority = task.priority + 1
             bulk.append(task)
-
-        if bulk:
-            Task.objects.bulk_update(bulk, ["priority"], batch_size=100)
-        return super().form_valid(form)
+        with transaction.atomic():
+            if bulk:
+                Task.objects.bulk_update(bulk, ["priority"], batch_size=100)
+            self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class TaskListView(BaseTaskView, ListView):
