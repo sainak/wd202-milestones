@@ -36,17 +36,18 @@ class BaseTaskView(ObjectOwnerMixin):
                 completed=False,
             )
             .exclude(pk=form.instance.id)
+            .select_for_update()
             .order_by("priority")
         )
-        bulk = []
-        for task in tasks:
-            if task.priority > _priority:
-                break
-            _priority = task.priority = task.priority + 1
-            bulk.append(task)
         with transaction.atomic():
+            bulk = []
+            for task in tasks:
+                if task.priority > _priority:
+                    break
+                _priority = task.priority = task.priority + 1
+                bulk.append(task)
             if bulk:
-                Task.objects.bulk_update(bulk, ["priority"], batch_size=100)
+                Task.objects.bulk_update(bulk, ["priority"], batch_size=1000)
             self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
