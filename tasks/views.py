@@ -29,7 +29,12 @@ class BaseTaskView(ObjectOwnerMixin):
         form.instance.user = self.request.user
         _priority = form.instance.priority
         tasks = (
-            Task.objects.filter(priority__gte=_priority, deleted=False, completed=False)
+            Task.objects.filter(
+                user=self.request.user,
+                priority__gte=_priority,
+                deleted=False,
+                completed=False,
+            )
             .exclude(pk=form.instance.id)
             .order_by("priority")
         )
