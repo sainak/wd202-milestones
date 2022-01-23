@@ -14,13 +14,3 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                "priority",
-                "user",
-                condition=(Q(deleted=False) & Q(completed=False)),
-                name="unique_task_priority",
-            )
-        ]
