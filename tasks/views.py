@@ -22,11 +22,16 @@ class BaseTaskView(ObjectOwnerMixin):
     success_url = "/tasks/"
 
     def form_valid(self, form):
-        # if its delete, we don't need to set the user or perform increments
         if self.request.POST.get("confirm_delete") is not None:
+            # if its delete, we don't need to set the user or perform increments
             return super().form_valid(form)
 
         form.instance.user = self.request.user
+
+        if form.instance.completed:
+            # if the task is completed, we don't need to increment the priority
+            return super().form_valid(form)
+
         _priority = form.instance.priority
         tasks = (
             Task.objects.filter(
