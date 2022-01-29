@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .filters import TaskChangeFilter, TaskFilter
@@ -16,6 +17,14 @@ class TaskViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
 
 
 class TaskChangeViewSet(ReadOnlyModelViewSet):
