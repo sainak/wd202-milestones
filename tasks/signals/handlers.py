@@ -12,7 +12,7 @@ def save_task(sender, instance: Task, raw, using, **kwargs):
         # don't do anything when using raw queries
         return
 
-    if instance.completed:
+    if instance.status == "COMPLETED":
         TaskChange.add_change(instance)
         return
 
@@ -23,9 +23,11 @@ def save_task(sender, instance: Task, raw, using, **kwargs):
             owner=instance.owner,
             priority__gte=clashing_priority,
             deleted=False,
-            completed=False,
         )
-        .exclude(id=instance.id)
+        .exclude(
+            id=instance.id,
+            status="COMPLETED",
+        )
         .select_for_update()
         .order_by("priority")
     )

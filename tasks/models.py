@@ -19,7 +19,6 @@ class Task(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField()
     priority = models.IntegerField(default=0)
-    completed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
