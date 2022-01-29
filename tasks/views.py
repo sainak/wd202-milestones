@@ -1,5 +1,6 @@
 from django.db import transaction
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework import mixins
 
 from .filters import TaskChangeFilter, TaskFilter
 from .models import Task, TaskChange
@@ -27,11 +28,14 @@ class TaskViewSet(ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-class TaskChangeViewSet(ReadOnlyModelViewSet):
+class TaskChangeViewSet(mixins.ListModelMixin, GenericViewSet):
 
     queryset = TaskChange.objects.all()
     serializer_class = TaskChangeSerializer
     filterset_class = TaskChangeFilter
 
     def get_queryset(self):
-        return TaskChange.objects.filter(task__owner=self.request.user)
+        return TaskChange.objects.filter(
+            task=self.kwargs["task_pk"],
+            task__owner=self.request.user,
+        )

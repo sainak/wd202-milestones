@@ -23,4 +23,8 @@ class TaskChangeFilter(django_filters.FilterSet):
 
     class Meta:
         model = TaskChange
-        fields = ("task", "previous_status", "new_status", "changed_at")
+        fields = (
+            "previous_status",
+            "new_status",
+            "changed_at",
+        )

@@ -13,7 +13,6 @@ class TaskSerializer(ModelSerializer):
             "status",
             "priority",
             "created_at",
-            "completed",
             "owner",
         )
         read_only_fields = ("owner", "created_at")
