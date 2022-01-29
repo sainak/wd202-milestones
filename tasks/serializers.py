@@ -18,9 +18,6 @@ class TaskSerializer(ModelSerializer):
         )
         read_only_fields = ("owner", "created_at")
 
-    def save(self, **kwargs):
-        return super().save(**kwargs)
-
 
 class TaskChangeSerializer(ModelSerializer):
     class Meta:
