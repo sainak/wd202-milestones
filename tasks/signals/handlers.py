@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from tasks.models import Task, TaskChange
 
 
-@receiver(pre_save, sender=Task)
+@receiver(pre_save, sender=Task, dispatch_uid="task.signals.0001_task_pre_save")
 def save_task(sender, instance: Task, raw, using, **kwargs):
 
     if raw:
