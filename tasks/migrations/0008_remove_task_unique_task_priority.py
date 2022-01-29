@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0007_task_unique_task_priority'),
+        ("tasks", "0007_task_unique_task_priority"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='task',
-            name='unique_task_priority',
+            model_name="task",
+            name="unique_task_priority",
         ),
     ]

@@ -1,12 +1,15 @@
 from django.contrib import admin
 
-from tasks.models import Task
+from .models import Task, TaskChange
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "created_date", "completed", "deleted")
+    list_display = ("id", "title", "created_at", "priority", "status", "deleted")
     list_display_links = ("id", "title")
-    list_filter = ("created_date",)
+    list_filter = ("created_at", "status")
     search_fields = ("title", "description")
-    readonly_fields = ("created_date",)
+    readonly_fields = ("created_at",)
+
+
+admin.site.register(TaskChange)

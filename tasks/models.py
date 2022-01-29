@@ -1,16 +1,101 @@
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.db import models
-from django.db.models import Q
+from django.db import models, transaction
+
+STATUS_CHOICES = (
+    ("PENDING", "PENDING"),
+    ("IN_PROGRESS", "IN_PROGRESS"),
+    ("COMPLETED", "COMPLETED"),
+    ("CANCELLED", "CANCELLED"),
+)
 
 
 class Task(models.Model):
+
+    _previous_priority = None
+    _previous_status = None
+
     title = models.CharField(max_length=100)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
-    completed = models.BooleanField(default=False)
-    created_date = models.DateTimeField(auto_now=True)
-    priority = models.IntegerField()
+    priority = models.IntegerField(default=0)
     deleted = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    status = models.CharField(
+        max_length=100, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._previous_priority = self.priority
+        self._previous_status = self.status
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # if raw:
+        #     # don't do anything when using raw queries
+        #     return
+
+        if self.status == "COMPLETED":
+            with transaction.atomic():
+                super().save(*args, **kwargs)
+                TaskChange.add_change(self)
+                return
+
+        clashing_priority = self.priority
+
+        clashing_tasks = (
+            Task.objects.filter(
+                owner=self.owner,
+                priority__gte=clashing_priority,
+                deleted=False,
+            )
+            .exclude(
+                id=self.id,
+                status="COMPLETED",
+            )
+            .select_for_update()
+            .order_by("priority")
+        )
+
+        with transaction.atomic():
+            bulk = []
+            for task in clashing_tasks:
+                if task.priority > clashing_priority:
+                    break
+                clashing_priority = task.priority = task.priority + 1
+                bulk.append(task)
+
+            if bulk:
+                bulk_update_kwargs = {}
+
+                db_backend = settings.DATABASES[self._state.db]["ENGINE"].split(".")[-1]
+                if db_backend == "sqlite3":
+                    # https://www.sqlite.org/limits.html#max_sql_length
+                    bulk_update_kwargs["batch_size"] = 500
+
+                Task.objects.bulk_update(bulk, ["priority"], **bulk_update_kwargs)
+
+            super().save(*args, **kwargs)
+            TaskChange.add_change(self)
+
+
+class TaskChange(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    previous_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
+    new_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
+    changed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.task.title} - {self.previous_status} -> {self.new_status}"
+
+    @classmethod
+    def add_change(cls, task: Task):
+        if task._previous_status != task.status:
+            cls.objects.create(
+                task=task,
+                previous_status=task._previous_status,
+                new_status=task.status,
+            )

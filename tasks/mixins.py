@@ -8,4 +8,4 @@ class ObjectOwnerMixin(LoginRequiredMixin):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(user=self.request.user)
+        return queryset.filter(owner=self.request.user)

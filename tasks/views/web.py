@@ -9,9 +9,9 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import TaskForm
-from .mixins import ObjectOwnerMixin
-from .models import Task
+from tasks.forms import TaskForm
+from tasks.mixins import ObjectOwnerMixin
+from tasks.models import Task
 
 
 class BaseTaskView(ObjectOwnerMixin):
@@ -22,39 +22,12 @@ class BaseTaskView(ObjectOwnerMixin):
     success_url = "/tasks/"
 
     def form_valid(self, form):
-        if self.request.POST.get("confirm_delete") is not None:
-            # if its delete, we don't need to set the user or perform increments
-            return super().form_valid(form)
+        # if self.request.POST.get("confirm_delete") is not None:
+        #     # if its delete, we don't need to set the user or perform increments
+        #     return super().form_valid(form)
 
-        form.instance.user = self.request.user
-
-        if form.instance.completed:
-            # if the task is completed, we don't need to increment the priority
-            return super().form_valid(form)
-
-        _priority = form.instance.priority
-        tasks = (
-            Task.objects.filter(
-                user=self.request.user,
-                priority__gte=_priority,
-                deleted=False,
-                completed=False,
-            )
-            .exclude(pk=form.instance.id)
-            .select_for_update()
-            .order_by("priority")
-        )
-        with transaction.atomic():
-            bulk = []
-            for task in tasks:
-                if task.priority > _priority:
-                    break
-                _priority = task.priority = task.priority + 1
-                bulk.append(task)
-            if bulk:
-                Task.objects.bulk_update(bulk, ["priority"], batch_size=1000)
-            self.object = form.save()
-        return HttpResponseRedirect(self.get_success_url())
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class TaskListView(BaseTaskView, ListView):
@@ -90,3 +63,6 @@ class TaskUpdateView(BaseTaskView, UpdateView):
 
 class TaskDeleteView(BaseTaskView, DeleteView):
     form_class = Form
+
+    def form_valid(self, form):
+        return super(DeleteView, self).form_valid(form)
