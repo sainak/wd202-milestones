@@ -1,7 +1,8 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
+from .filters import TaskChangeFilter, TaskFilter
 from .models import Task, TaskChange
-from .serializers import TaskSerializer, TaskChangeSerializer
-from .filters import TaskFilter, TaskChangeFilter
+from .serializers import TaskChangeSerializer, TaskSerializer
 
 
 class TaskViewSet(ModelViewSet):

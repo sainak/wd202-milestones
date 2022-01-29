@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
     ("IN_PROGRESS", "IN_PROGRESS"),

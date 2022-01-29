@@ -1,9 +1,9 @@
 import django_filters
 from django.forms import widgets
-
 from django.utils.timezone import now
 
-from .models import Task, TaskChange, STATUS_CHOICES
+from .models import STATUS_CHOICES, Task, TaskChange
+
 
 class TaskFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr="icontains")
@@ -23,9 +23,4 @@ class TaskChangeFilter(django_filters.FilterSet):
 
     class Meta:
         model = TaskChange
-        fields = (
-            "task",
-            "previous_status",
-            "new_status",
-            "changed_at"
-        )
+        fields = ("task", "previous_status", "new_status", "changed_at")

@@ -1,8 +1,9 @@
+from django.conf import settings
+from django.db import transaction
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
 from tasks.models import Task, TaskChange
-from django.db import transaction
-from django.conf import settings
 
 
 @receiver(pre_save, sender=Task)

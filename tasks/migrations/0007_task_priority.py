@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0006_rename_user_task_owner_remove_task_created_date_and_more'),
+        ("tasks", "0006_rename_user_task_owner_remove_task_created_date_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='priority',
+            model_name="task",
+            name="priority",
             field=models.IntegerField(default=0),
         ),
     ]
