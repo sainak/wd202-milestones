@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block content_body %}
+
+
+<form method="post">
+  <div class="flex flex-col h-screen items-center">
+    <div class="sm:w-96 w-full px-3">
+      <div class="flex items-center mb-4 mt-10 content-center">
+        <h1 class="text-4xl font-black ">Settings</h1>
+      </div>
+
+      {% csrf_token %}
+      {{ form}}
+
+    </div>
+    <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
+      <button class="btn-primary" type="submit">Save</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

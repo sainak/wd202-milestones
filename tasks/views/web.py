@@ -1,12 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import Form
-from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    TemplateView,
+    UpdateView,
+)
 from django_filters.views import FilterView
 
 from tasks.filters import TaskFilter
-from tasks.forms import TaskForm
+from tasks.forms import TaskForm, UserSettingsForm
 from tasks.mixins import ObjectOwnerMixin
-from tasks.models import Task
+from tasks.models import Task, UserSettings
 
 
 class BaseTaskView(ObjectOwnerMixin, LoginRequiredMixin):
@@ -48,3 +54,13 @@ class TaskDeleteView(BaseTaskView, DeleteView):
 
     def form_valid(self, form):
         return super(DeleteView, self).form_valid(form)
+
+
+class UserSettingsView(LoginRequiredMixin, UpdateView):
+    model = UserSettings
+    form_class = UserSettingsForm
+    template_name = "tasks/user_settings.html"
+    success_url = "/tasks/"
+
+    def get_object(self):
+        return UserSettings.objects.get_or_create(user=self.request.user)[0]

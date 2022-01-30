@@ -9,6 +9,7 @@ from .views.web import (
     TaskDetailView,
     TaskListView,
     TaskUpdateView,
+    UserSettingsView,
 )
 
 web_urlpatterns = [
@@ -17,6 +18,7 @@ web_urlpatterns = [
     path("<int:pk>/", TaskDetailView.as_view(), name="tasks-detail"),
     path("update/<int:pk>/", TaskUpdateView.as_view(), name="tasks-update"),
     path("delete/<int:pk>/", TaskDeleteView.as_view(), name="tasks-delete"),
+    path("settings/", UserSettingsView.as_view(), name="user-settings"),
 ]
 
 router = routers.DefaultRouter(trailing_slash=False)

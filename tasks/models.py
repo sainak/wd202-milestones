@@ -99,3 +99,11 @@ class TaskChange(models.Model):
                 previous_status=task._previous_status,
                 new_status=task.status,
             )
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="settings")
+    report_time = models.TimeField(default="00:00:00")
+
+    def __str__(self):
+        return f"{self.user.username}'s settings"

@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Task
+from .models import Task, UserSettings
 
 
 class TaskForm(forms.ModelForm):
@@ -17,4 +17,19 @@ class TaskForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "form-control", "rows": "5"}),
             "priority": forms.NumberInput(attrs={"class": "form-control"}),
             "status": forms.Select(attrs={"class": "form-control"}),
+        }
+
+
+class UserSettingsForm(forms.ModelForm):
+
+    error_css_class = "is-invalid"
+    required_css_class = "is-required"
+
+    class Meta:
+        model = UserSettings
+        fields = ("report_time",)
+        widgets = {
+            "report_time": forms.TimeInput(
+                attrs={"class": "form-control", "type": "time"}
+            ),
         }
