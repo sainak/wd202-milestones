@@ -19,10 +19,10 @@ web_urlpatterns = [
     path("delete/<int:pk>/", TaskDeleteView.as_view(), name="tasks-delete"),
 ]
 
-router = routers.SimpleRouter(trailing_slash=False)
+router = routers.DefaultRouter(trailing_slash=False)
 router.register("task", TaskViewSet)
 
-task_history = routers.NestedSimpleRouter(router, "task", lookup="task")
+task_history = routers.NestedDefaultRouter(router, "task", lookup="task")
 task_history.register(r"history", TaskChangeViewSet, basename="task-history")
 
 api_urlpatterns = [
