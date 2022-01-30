@@ -5,16 +5,15 @@
 
 @layer components{
     .form-control {
-      @apply mt-1 sm:text-sm w-full rounded-lg shadow-sm bg-pgray border-gray-300 focus:ring-4 focus:ring-red-300 focus:border-red-300 
+      @apply mt-1 sm:text-sm w-full rounded-lg shadow-sm bg-pgray border-gray-300 focus:ring-4 focus:ring-red-300 focus:border-red-300
     }
     .form-check-input {
-      @apply mr-2 text-red-600 w-5 h-5 rounded shadow-sm bg-pgray border-gray-300 focus:ring-4 focus:ring-red-300 focus:border-red-300 
+      @apply mr-2 text-red-600 w-5 h-5 rounded shadow-sm bg-pgray border-gray-300 focus:ring-4 focus:ring-red-300 focus:border-red-300
     }
     .form-error {
         @apply flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1
     }
     .btn-primary {
-      @apply block w-full rounded-lg px-5 py-3 text-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 
+      @apply block w-full rounded-lg px-5 py-3 text-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition duration-500
     }
   }
-  

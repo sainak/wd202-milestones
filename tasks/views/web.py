@@ -34,7 +34,7 @@ class TaskListView(BaseTaskView, FilterView):
         context_data = super().get_context_data(**kwargs)
         filter = self.filterset_class(self.request.GET, queryset=self.get_queryset())
         context_data["filtered_tasks"] = filter.qs.count()
-        context_data["filtered_status"] = filter.data.get("status", "all")
+        context_data["filtered_status"] = filter.data.get("status", "all").lower()
         context_data["total_tasks"] = self.queryset.count()
         return context_data
 
