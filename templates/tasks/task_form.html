@@ -41,10 +41,10 @@
           </span>
         </div>
         <div class="col-span-12">
-          {{ form.completed }}
           <label for="id_completed">Completed</label>
+          {{ form.status }}
           <span class="form-error">
-            {{ form.completed.errors.as_text }}
+            {{ form.status.errors.as_text }}
           </span>
         </div>
       </div>
