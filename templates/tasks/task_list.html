@@ -17,12 +17,18 @@
       <a class="ml-auto text-red-500 font-medium" href="{% url 'logout' %}"> Log out</a>
     </div>
     <h4 class="text-gray-600 text-sm">
-      {{ completed_tasks }} of {{ total_tasks }} tasks completed
+      {% if filtered_status == "all" %}
+      {{ total_tasks }} tasks
+      {% else %}
+      {{ filtered_tasks }} of {{ total_tasks }} tasks {{ filtered_status|lower }}
+      {% endif %}
     </h4>
 
-    <div class="flex my-3 mx-1 justify-between font-semibold">
+    <div class="flex flex-wrap my-3 mx-1 justify-evenly font-semibold">
       <a class="px-6 py-1.5 rounded-full" id="tab_all" href="{% url 'tasks-list' %}">All</a>
       <a class="px-6 py-1.5 rounded-full" id="tab_pending" href="{% url 'tasks-list' %}?status=PENDING">Pending</a>
+      <a class="px-6 py-1.5 rounded-full" id="tab_in_progress" href="{% url 'tasks-list' %}?status=IN_PROGRESS">In Progress</a>
+      <a class="px-6 py-1.5 rounded-full" id="tab_cancelled" href="{% url 'tasks-list' %}?status=CANCELLED">Cancelled</a>
       <a class="px-6 py-1.5 rounded-full" id="tab_completed"
         href="{% url 'tasks-list' %}?status=COMPLETED">Completed</a>
     </div>

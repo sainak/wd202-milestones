@@ -21,10 +21,6 @@ class BaseTaskView(ObjectOwnerMixin):
     success_url = "/tasks/"
 
     def form_valid(self, form):
-        # if self.request.POST.get("confirm_delete") is not None:
-        #     # if its delete, we don't need to set the user or perform increments
-        #     return super().form_valid(form)
-
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
@@ -37,20 +33,10 @@ class TaskListView(BaseTaskView, FilterView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         filter = self.filterset_class(self.request.GET, queryset=self.get_queryset())
-        context_data["completed_tasks"] = self.queryset.filter(
-            status="completed"
-        ).count()
+        context_data["filtered_tasks"] = filter.qs.count()
+        context_data["filtered_status"] = filter.data.get("status", "all")
         context_data["total_tasks"] = self.queryset.count()
         return context_data
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     status = self.request.GET.get("status")
-    #     if status == "completed":
-    #         queryset = queryset.filter(completed=True)
-    #     elif status == "pending":
-    #         queryset = queryset.filter(completed=False)
-    #     return queryset
 
 
 class TaskDetailView(BaseTaskView, DetailView):
