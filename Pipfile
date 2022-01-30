@@ -9,6 +9,8 @@ djangorestframework = "*"
 django-filter = "*"
 drf-nested-routers = "*"
 django-tailwind = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 
