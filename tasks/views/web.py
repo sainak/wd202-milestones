@@ -1,10 +1,6 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import Form
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    UpdateView,
-)
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
 
 from tasks.filters import TaskFilter
@@ -13,16 +9,12 @@ from tasks.mixins import ObjectOwnerMixin
 from tasks.models import Task
 
 
-class BaseTaskView(ObjectOwnerMixin):
+class BaseTaskView(ObjectOwnerMixin, LoginRequiredMixin):
     model = Task
     queryset = Task.objects.filter(deleted=False).order_by("-priority")
     form_class = TaskForm
     context_object_name = "tasks"
     success_url = "/tasks/"
-
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super().form_valid(form)
 
 
 class TaskListView(BaseTaskView, FilterView):
