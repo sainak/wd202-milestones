@@ -11,6 +11,7 @@ drf-nested-routers = "*"
 django-tailwind = "*"
 celery = "*"
 redis = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 
