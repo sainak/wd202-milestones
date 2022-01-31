@@ -29,9 +29,9 @@ def generate_report(user):
     )
 
     if not status:
-        report += _("\nNo tasks to report.")
+        report += "\nNo tasks to report."
     for s in status:
-        report += _(f"\n{s['status'].title().replace('_', ' ')}: {s['count']}")
+        report += f"\n{s['status'].title().replace('_', ' ')}: {s['count']}"
 
     return report
 
