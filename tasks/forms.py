@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.translation import gettext_lazy as _
 
 from .models import Task, UserSettings
 
@@ -8,6 +7,10 @@ class TaskForm(forms.ModelForm):
 
     error_css_class = "is-invalid"
     required_css_class = "is-required"
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("label_suffix", "")
+        super().__init__(*args, **kwargs)
 
     class Meta:
         model = Task

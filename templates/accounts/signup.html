@@ -10,52 +10,28 @@
       {% csrf_token %}
 
       <div class="grid gap-6 ">
-        <div class="col-span-12">
-          <label for="id_username">Username</label>
-          {{ form.username }}
-          <span class="form-error">
-            {{ form.username.errors.as_text }}
-          </span>
-          <span class="mt-1 text-xs text-gray-600">Required. 150 characters or fewer. Letters, digits and
-            @/./+/-/_ only.</span>
 
+        {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          {{ field }}
+          <span class="form-error">{{ field.errors.as_text }}</span>
+          <span class="mt-1 text-xs text-gray-600">{{ field.help_text }}</span>
         </div>
+        {% endfor %}
 
-        <div class="col-span-12">
-          <label for="id_password1">Password</label>
-          {{ form.password1 }}
-          <span class="form-error">
-            {{ form.password1.errors.as_text }}
-          </span>
-          <span class="text-xs text-gray-600">
-            <ul class="mt-1 ml-3 list-disc">
-              <li>Your password can't be too similar to your other personal information.</li>
-              <li>Your password must contain at least 8 characters.</li>
-              <li>Your password can't be a commonly used password.</li>
-              <li>Your password can't be entirely numeric.</li>
-            </ul>
-          </span>
-
-        </div>
-
-        <div class="col-span-12">
-          <label for="id_password2">Confirm Password</label>
-          {{ form.password2 }}
-          <span class="form-error">
-            {{ form.password2.errors.as_text }}
-          </span>
-          <span class="mt-1 text-xs text-gray-600">Enter the same password as before, for verification.</span>
-        </div>
         <span class="form-error">
           {% for error in form.non_field_errors %}
           <p class="p-4"> {{ error }} </p>
           {% endfor %}
         </span>
 
-        <div class="col-span-12">
+        <div>
           <button type="submit" class="btn-primary">Signup</button>
         </div>
-        <p class="col-span-12 text-center"><a href="{% url 'login' %}" class="btn">Already have an account? Login.</a></p>
+        <p class="text-center">
+          <a href="{% url 'login' %}" class="btn">Already have an account? Login.</a>
+        </p>
       </div>
     </form>
   </div>

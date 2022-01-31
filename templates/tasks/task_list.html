@@ -24,7 +24,7 @@
       {% endif %}
     </h4>
 
-    <div class="flex flex-wrap my-3 mx-1 justify-evenly font-semibold">
+    <div class="flex flex-wrap gap-1 my-3 mx-1 justify-evenly font-semibold">
       <a class="px-6 py-1.5 rounded-full hover:bg-red-100 transition duration-500" id="tab_all" href="{% url 'tasks-list' %}">All</a>
       <a class="px-6 py-1.5 rounded-full hover:bg-red-100 transition duration-500" id="tab_pending"
         href="{% url 'tasks-list' %}?status=PENDING">Pending</a>
