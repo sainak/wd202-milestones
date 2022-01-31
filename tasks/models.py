@@ -36,15 +36,10 @@ class Task(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # if raw:
-        #     # don't do anything when using raw queries
-        #     return
 
         if self.status == "COMPLETED":
-            with transaction.atomic():
-                super().save(*args, **kwargs)
-                TaskChange.add_change(self)
-                return
+            super().save(*args, **kwargs)
+            return
 
         clashing_priority = self.priority
 
@@ -81,7 +76,6 @@ class Task(models.Model):
                 Task.objects.bulk_update(bulk, ["priority"], **bulk_update_kwargs)
 
             super().save(*args, **kwargs)
-            TaskChange.add_change(self)
 
 
 class TaskChange(models.Model):
@@ -91,16 +85,7 @@ class TaskChange(models.Model):
     changed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.task.title} - {self.previous_status} -> {self.new_status}"
-
-    @classmethod
-    def add_change(cls, task: Task):
-        if task._previous_status != task.status:
-            cls.objects.create(
-                task=task,
-                previous_status=task._previous_status,
-                new_status=task.status,
-            )
+        return f"{self.task.owner.username}: {self.task.title} - {self.previous_status} -> {self.new_status}"
 
 
 class UserSettings(models.Model):
