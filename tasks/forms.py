@@ -25,11 +25,16 @@ class UserSettingsForm(forms.ModelForm):
     error_css_class = "is-invalid"
     required_css_class = "is-required"
 
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("label_suffix", "")
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = UserSettings
-        fields = ("report_time",)
+        fields = ("report_time", "send_report")
         widgets = {
             "report_time": forms.TimeInput(
                 attrs={"class": "form-control", "type": "time"}
             ),
+            "send_report": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }

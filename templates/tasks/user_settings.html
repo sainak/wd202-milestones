@@ -12,7 +12,23 @@
       </div>
 
       {% csrf_token %}
-      {{ form}}
+      <div class="mt-16 grid gap-6 ">
+        <div class="col-span-12">
+          {{ form.send_report }}
+          {{ form.send_report.label_tag }}
+          <span class="form-error">
+            {{ form.send_report.errors.as_text }}
+          </span>
+        </div>
+        <div class="col-span-12">
+          {{ form.report_time.label_tag }}
+          {{ form.report_time }}
+          <span class="form-error">
+            {{ form.report_time.errors.as_text }}
+          </span>
+        </div>
+      </div>
+
 
     </div>
     <div class="sm:w-96 w-full px-3 mt-auto mb-10 ">
