@@ -145,7 +145,7 @@ BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
 CELERY_TIMEZONE = TIME_ZONE
 # https://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-max-loop-interval
-CELERYBEAT_MAX_LOOP_INTERVAL = 5
+# CELERYBEAT_MAX_LOOP_INTERVAL = 5
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST_USER = "example@example.com"
