@@ -36,5 +36,5 @@ pipenv install
 pipenv run python manage.py tailwind install
 pipenv run python manage.py tailwind build
 pipenv run python manage.py runserver
-pipenv run celery -A task_manager worker --beat --scheduler django
+pipenv run celery -A task_manager worker --beat --scheduler "tasks.schedulers:DynamicScheduler" --loglevel INFO
 ```

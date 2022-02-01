@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from django.utils.timezone import datetime, now
-from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -89,44 +87,17 @@ class TaskChange(models.Model):
 
 
 class UserSettings(models.Model):
-    _previous_report_time = None
-
     send_report = models.BooleanField(default=False)
     report_time = models.TimeField(default="00:00:00")
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="settings")
-    send_report_task = models.OneToOneField(
-        PeriodicTask, on_delete=models.CASCADE, null=True, blank=True
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._previous_report_time = self.report_time
+    send_report_task_id = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s settings"
 
     def save(self, *args, **kwargs):
-        if not self.send_report and self.send_report_task:
-            try:
-                self.send_report_task.delete()
-            except (PeriodicTask.DoesNotExist, AttributeError):
-                pass
-
-        if self.send_report and self.report_time != self._previous_report_time:
-            try:
-                self.send_report_task.delete()
-            except (PeriodicTask.DoesNotExist, AttributeError):
-                pass
-
-            self.send_report_task = PeriodicTask.objects.create(
-                name=f"Send report to {self.user.username}",
-                task="tasks.tasks.send_report",
-                interval=IntervalSchedule.objects.get_or_create(
-                    every=1, period=IntervalSchedule.DAYS
-                )[0],
-                start_time=datetime.combine(now(), self.report_time),
-                args=[self.user.id],
-                enabled=True,
-            )
+        if not self.send_report:
+            self.send_report_task_id = None
+        else:
+            self.send_report_task_id = f"daily_report_for:user{self.user.id}"
         super().save(*args, **kwargs)
