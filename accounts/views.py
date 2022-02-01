@@ -12,4 +12,4 @@ class UserLoginView(LoginView):
 class UserSignupView(CreateView):
     form_class = UserCreationForm
     template_name = "accounts/signup.html"
-    success_url = "/login/"
+    success_url = "/user/login/"
