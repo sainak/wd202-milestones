@@ -26,7 +26,7 @@ def send_report(user):
         .annotate(count=Count("status"))
     )
 
-    # TODO: use template to make this beautiful
+    # TODO: use template to make this beautiful and add unsubscribe link
     report = f"Hi {user.username},\n\n"
     if not status:
         report += "\nNo tasks to report today."
@@ -36,7 +36,6 @@ def send_report(user):
             _sn = s["status"].title().replace("_", " ")
             _sc = s["count"]
             report += f"\n{_sn} task{'s'[:_sc^1]}: {_sc}"
-    # TODO: add unsubscribe link
 
     send_mail("Daily Task Report", report, settings.EMAIL_HOST_USER, [user.email])
 
@@ -53,6 +52,7 @@ def send_report_celery_task(user_id):
         logger.error(f"send_report: User with id {user_id} does not exist")
         return
     try:
+        logger.info(f"send_report: Sending report to {user.username}")
         send_report(user)
     except Exception as e:
         try:
@@ -71,6 +71,7 @@ def send_report_celery_task(user_id):
 
 @shared_task
 def fetch_user_settings():
+    logger.info("fetch_user_settings: Started")
     now = datetime.now()
     users_configs_to_report = UserSettings.objects.filter(
         send_report=True,
@@ -81,6 +82,7 @@ def fetch_user_settings():
         last_report_sent_at__lt=now.date(),
     ).select_related("user")
 
+    logger.info(f"fetch_user_settings: {len(users_configs_to_report)} users to report")
     for user_config in users_configs_to_report:
         send_report_celery_task.delay(user_config.user.id)
         user_config.last_report_sent_at = datetime.now()
