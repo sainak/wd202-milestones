@@ -75,8 +75,8 @@ def fetch_user_settings():
     users_configs_to_report = UserSettings.objects.filter(
         send_report=True,
         report_time__range=(
-            now.time() - timedelta(minutes=1),
-            now.time() + timedelta(minutes=1),
+            now.time() - timedelta(seconds=30),
+            now.time() + timedelta(seconds=30),
         ),
         last_report_sent_at__lt=now.date(),
     ).select_related("user")
