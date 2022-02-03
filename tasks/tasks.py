@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from celery import shared_task
-from celery.exceptions import MaxRetriesExceededError
+from celery import current_app, shared_task
 from celery.schedules import crontab
 from celery.utils.log import get_logger
 from django.conf import settings
@@ -10,7 +9,6 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Count
 
-from task_manager.celery import app
 from tasks.models import Task, UserSettings
 
 logger = get_logger(__name__)
@@ -94,7 +92,7 @@ def fetch_user_settings():
         user_config.save()
 
 
-@app.on_after_finalize.connect
+@current_app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.conf.beat_schedule["fetch_user_settings"] = {
         "task": "tasks.tasks.fetch_user_settings",
