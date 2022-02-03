@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "django_filters",
     "tailwind",
     "theme",
-    "django_celery_beat",
     "accounts",
     "tasks",
 ]

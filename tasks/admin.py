@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Task, TaskChange
+from .models import Task, TaskChange, UserSettings
 
 
 @admin.register(Task)
@@ -13,3 +13,4 @@ class TaskAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TaskChange)
+admin.site.register(UserSettings)

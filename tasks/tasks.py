@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from celery import shared_task
 from celery.exceptions import MaxRetriesExceededError
@@ -16,6 +17,7 @@ logger = get_logger(__name__)
 
 
 def send_report(user):
+    # raise Exception("Sending report failed")
     status = (
         Task.objects.filter(
             owner=user,
@@ -43,55 +45,58 @@ def send_report(user):
 @shared_task(
     bind=True,
     default_retry_delay=30,
-    max_retries=3,
+    max_retries=2,
 )
-def send_report_celery_task(user_id):
+def send_report_celery_task(self, user_id):
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist as e:
         logger.error(f"send_report: User with id {user_id} does not exist")
         return
     try:
-        logger.info(f"send_report: Sending report to {user.username}")
+        logger.info(f"send_report: Sending report to [{user.id}]:{user.username}")
         send_report(user)
     except Exception as e:
-        try:
+        if self.request.retries < self.max_retries:
             logger.error(
-                f"send_report: Failed to send report for user {user_id} retrying..."
+                f"send_report: Failed to send report for user [{user.id}]:{user.username} retrying..."
             )
-            raise send_report_celery_task.retry(exc=e)
-        except MaxRetriesExceededError:
-            logger.error(f"send_report: Max retries exceeded for user {user_id}")
+        else:
+            logger.error(
+                f"send_report: Max retries exceeded for user [{user.id}]:{user.username}"
+            )
             # user.settings.last_report_sent_at = (
             #     user.settings.last_report_sent_at - timedelta(days=1)
             # )
             # user.settings.save()
-            raise
+        raise self.retry(exc=e)
 
 
 @shared_task
 def fetch_user_settings():
     logger.info("fetch_user_settings: Started")
-    now = datetime.now()
+    now = datetime.now().replace(tzinfo=ZoneInfo(settings.CELERY_TIMEZONE))
     users_configs_to_report = UserSettings.objects.filter(
         send_report=True,
         report_time__range=(
-            now.time() - timedelta(seconds=30),
-            now.time() + timedelta(seconds=30),
+            (now - timedelta(seconds=30)).timetz(),
+            (now + timedelta(seconds=30)).timetz(),
         ),
-        last_report_sent_at__lt=now.date(),
+        last_report_sent_at__lt=now - timedelta(minutes=2),
     ).select_related("user")
 
     logger.info(f"fetch_user_settings: {len(users_configs_to_report)} users to report")
     for user_config in users_configs_to_report:
         send_report_celery_task.delay(user_config.user.id)
-        user_config.last_report_sent_at = datetime.now()
+        user_config.last_report_sent_at = datetime.now().replace(
+            tzinfo=ZoneInfo(settings.CELERY_TIMEZONE)
+        )
         user_config.save()
 
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.conf.beat_schedule["fetch_user_settings"] = {
-        "task": "tasks.fetch_user_settings",
+        "task": "tasks.tasks.fetch_user_settings",
         "schedule": crontab(minute="*"),
     }
