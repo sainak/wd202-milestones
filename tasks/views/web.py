@@ -1,11 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import Form
+from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
     DetailView,
     ListView,
-    TemplateView,
     UpdateView,
 )
 from django_filters.views import FilterView
@@ -13,7 +13,7 @@ from django_filters.views import FilterView
 from tasks.filters import TaskFilter
 from tasks.forms import TaskForm, UserSettingsForm
 from tasks.mixins import ObjectOwnerMixin
-from tasks.models import Task, UserSettings, TaskChange
+from tasks.models import Task, TaskChange, UserSettings
 
 
 class BaseTaskView(ObjectOwnerMixin, LoginRequiredMixin):
@@ -21,7 +21,7 @@ class BaseTaskView(ObjectOwnerMixin, LoginRequiredMixin):
     queryset = Task.objects.filter(deleted=False).order_by("-priority")
     form_class = TaskForm
     context_object_name = "tasks"
-    success_url = "/tasks/"
+    success_url = reverse_lazy("tasks-list")
 
 
 class TaskListView(BaseTaskView, FilterView):
@@ -84,7 +84,7 @@ class UserSettingsView(LoginRequiredMixin, UpdateView):
     model = UserSettings
     form_class = UserSettingsForm
     template_name = "tasks/user_settings.html"
-    success_url = "/tasks/"
+    success_url = reverse_lazy("tasks-list")
 
     def get_object(self):
         return UserSettings.objects.get_or_create(user=self.request.user)[0]

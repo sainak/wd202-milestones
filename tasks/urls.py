@@ -7,9 +7,9 @@ from .views.web import (
     TaskCreateView,
     TaskDeleteView,
     TaskDetailView,
+    TaskHistoryView,
     TaskListView,
     TaskUpdateView,
-    TaskHistoryView,
     UserSettingsView,
 )
 
