@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0005_auto_20220130_2039'),
+        ("tasks", "0005_auto_20220130_2039"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='usersettings',
-            name='last_report_sent_at',
+            model_name="usersettings",
+            name="last_report_sent_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='usersettings',
-            name='send_report',
+            model_name="usersettings",
+            name="send_report",
             field=models.BooleanField(default=False),
         ),
     ]
