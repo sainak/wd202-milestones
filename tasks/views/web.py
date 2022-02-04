@@ -4,6 +4,7 @@ from django.views.generic import (
     CreateView,
     DeleteView,
     DetailView,
+    ListView,
     TemplateView,
     UpdateView,
 )
@@ -12,7 +13,7 @@ from django_filters.views import FilterView
 from tasks.filters import TaskFilter
 from tasks.forms import TaskForm, UserSettingsForm
 from tasks.mixins import ObjectOwnerMixin
-from tasks.models import Task, UserSettings
+from tasks.models import Task, UserSettings, TaskChange
 
 
 class BaseTaskView(ObjectOwnerMixin, LoginRequiredMixin):
@@ -38,7 +39,7 @@ class TaskListView(BaseTaskView, FilterView):
 
 
 class TaskDetailView(BaseTaskView, DetailView):
-    ...
+    context_object_name = "task"
 
 
 class TaskCreateView(BaseTaskView, CreateView):
@@ -54,6 +55,29 @@ class TaskDeleteView(BaseTaskView, DeleteView):
 
     def form_valid(self, form):
         return super(DeleteView, self).form_valid(form)
+
+
+class TaskHistoryView(LoginRequiredMixin, ListView):
+    paginate_by = 8
+    template_name = "tasks/task_history.html"
+    context_object_name = "task_changes"
+    queryset = TaskChange.objects.all()
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                task=self.kwargs["pk"],
+                task__owner=self.request.user,
+            )
+            .order_by("-changed_at")
+        )
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["task"] = Task.objects.get(pk=self.kwargs["pk"])
+        return data
 
 
 class UserSettingsView(LoginRequiredMixin, UpdateView):

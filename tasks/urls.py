@@ -9,6 +9,7 @@ from .views.web import (
     TaskDetailView,
     TaskListView,
     TaskUpdateView,
+    TaskHistoryView,
     UserSettingsView,
 )
 
@@ -16,8 +17,9 @@ web_urlpatterns = [
     path("", TaskListView.as_view(), name="tasks-list"),
     path("create/", TaskCreateView.as_view(), name="tasks-create"),
     path("<int:pk>/", TaskDetailView.as_view(), name="tasks-detail"),
-    path("update/<int:pk>/", TaskUpdateView.as_view(), name="tasks-update"),
-    path("delete/<int:pk>/", TaskDeleteView.as_view(), name="tasks-delete"),
+    path("<int:pk>/history/", TaskHistoryView.as_view(), name="tasks-history"),
+    path("<int:pk>/update/", TaskUpdateView.as_view(), name="tasks-update"),
+    path("<int:pk>/delete/", TaskDeleteView.as_view(), name="tasks-delete"),
     path("settings/", UserSettingsView.as_view(), name="user-settings"),
 ]
 

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content_body %}
+
+<div class="flex flex-col h-screen items-center">
+
+  <div class="sm:w-96 w-full px-3 mb-6">
+    <div class="flex items-center mb-4 mt-10 content-center">
+      <h1 class="text-4xl font-black ">Task Detail</h1>
+    </div>
+  </div>
+
+  <div class="sm:w-96 w-full px-3 overflow-y-auto h-[70vh]">
+
+    <div class="grid mb-4 bg-pgray rounded-[16px] py-4 px-6">
+
+      <h3 class="text-gray-600 text-sm">Title</h3>
+      <h1 class="text-black text-2xl">{{ task.title }}</h1>
+
+      <h3 class="text-gray-600 text-sm mt-6">Description</h3>
+      <p class="text-black text-md">{{ task.description }}</p>
+
+      <h3 class="text-gray-600 text-sm mt-6">Status</h3>
+      <h1 class="text-black text-xl">{{ task.status }}</h1>
+
+      <div class="flex items-center justify-evenly mt-6">
+        <a href="{% url 'tasks-update' task.id %}" title="edit">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="#2DD4BF" />
+            <path
+              d="M24.1667 12.5C24.3856 12.2811 24.6455 12.1075 24.9314 11.9891C25.2174 11.8706 25.5239 11.8096 25.8334 11.8096C26.1429 11.8096 26.4494 11.8706 26.7354 11.9891C27.0214 12.1075 27.2812 12.2811 27.5001 12.5C27.719 12.7189 27.8926 12.9787 28.011 13.2647C28.1295 13.5506 28.1904 13.8571 28.1904 14.1667C28.1904 14.4762 28.1295 14.7827 28.011 15.0687C27.8926 15.3546 27.719 15.6145 27.5001 15.8333L16.2501 27.0833L11.6667 28.3333L12.9167 23.75L24.1667 12.5Z"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <a href="{% url 'tasks-delete' task.id %}" title="delete">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="#F43F5E" />
+            <path d="M12.5 15H14.1667H27.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M16.6667 15V13.3333C16.6667 12.8913 16.8423 12.4674 17.1549 12.1548C17.4675 11.8423 17.8914 11.6667 18.3334 11.6667H21.6667C22.1088 11.6667 22.5327 11.8423 22.8453 12.1548C23.1578 12.4674 23.3334 12.8913 23.3334 13.3333V15M25.8334 15V26.6667C25.8334 27.1087 25.6578 27.5326 25.3453 27.8452C25.0327 28.1577 24.6088 28.3333 24.1667 28.3333H15.8334C15.3914 28.3333 14.9675 28.1577 14.6549 27.8452C14.3423 27.5326 14.1667 27.1087 14.1667 26.6667V15H25.8334Z"
+              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+
+
+
+    </div>
+  </div>
+  <div class="sm:w-96 w-full px-3 pt-2 mt-auto">
+    <a class="btn-primary mt-4 mb-10 " href="{% url 'tasks-history' task.id %}">Status History</a>
+  </div>
+</div>
+
+{% endblock content_body %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content_body %}
+
+<div class="flex flex-col h-screen items-center">
+
+  <div class="sm:w-96 w-full px-3 mb-6">
+    <div class="flex items-center mb-4 mt-10 content-center">
+      <h1 class="text-4xl font-black ">Task History</h1>
+    </div>
+    <h4 class="text-gray-600 text-xl">
+      {{task.title}}
+    </h4>
+  </div>
+
+  <div class="sm:w-96 w-full px-3 overflow-y-auto h-[70vh]">
+    <div class="grid gap-3 mb-4 ">
+      {% for change in task_changes %}
+      <div class="grid card bg-pgray rounded-[16px] py-4 px-6">
+        <h1>
+          {{ change.previous_status}} -> {{ change.new_status }}
+        </h1>
+        <div class="text-gray-600 text-sm">
+          {{change.changed_at}}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="sm:w-96 w-full px-3 pt-2 mt-auto mb-10 ">
+    {% if page_obj.paginator.num_pages > 1 %}
+    {% include 'base_paginator.html' %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock content_body %}
