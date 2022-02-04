@@ -30,7 +30,7 @@ dump dumpdata: ## Dump database.
 loaddata: ## Load data from most recent db dump
 	@echo "--> Loading data from db dump"
 	@pipenv run ./manage.py loaddata $(shell ls -t db_dump_*.json | head -n 1) || \
-	{ echo "Failed to load data"; exit 1; }
+	{ echo "Failed to load data"; exit 0; }
 
 init-dev: require-pipenv require-direnv ## Setup Dev environment.
 	@echo "--> Initializing"
