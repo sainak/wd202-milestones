@@ -1,0 +1,17 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+
+[report]
+# Regexes for lines to exclude from consideration
+omit =
+  */migrations/*
+  */tests.py
+  */asgi.py
+  */wsgi.py
+  manage.py
+
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
