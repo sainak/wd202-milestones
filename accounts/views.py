@@ -8,7 +8,6 @@ from accounts.forms import AuthenticationForm, UserCreationForm
 class UserLoginView(LoginView):
     form_class = AuthenticationForm
     template_name = "accounts/login.html"
-    success_url = reverse_lazy("tasks-list")
 
 
 class UserSignupView(CreateView):
