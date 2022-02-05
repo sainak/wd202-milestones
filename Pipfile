@@ -17,6 +17,7 @@ ipython = "*"
 pre-commit = "*"
 black = "*"
 isort = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.10"
