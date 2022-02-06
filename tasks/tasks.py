@@ -48,7 +48,7 @@ def send_report(user):
 def send_report_celery_task(self, user_id):
     try:
         user = User.objects.get(id=user_id)
-    except User.DoesNotExist as e:
+    except User.DoesNotExist:
         logger.error(f"send_report: User with id {user_id} does not exist")
         return
     try:

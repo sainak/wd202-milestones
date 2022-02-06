@@ -6,4 +6,4 @@ class TasksConfig(AppConfig):
     name = "tasks"
 
     def ready(self):
-        from . import signals
+        from . import signals  # noqa

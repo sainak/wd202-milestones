@@ -1,6 +1,6 @@
 ignore:
   - "*/migrations/*"
-  - "*/tests.py"
+  - "*/tests/*"
   - "*/asgi.py"
   - "*/wsgi.py"
   - "manage.py"
