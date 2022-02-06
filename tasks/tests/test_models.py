@@ -110,3 +110,14 @@ class UserSettingsModelTests(TestCase):
         )
         self.assertEqual(str(user_settings), "testuser's settings")
         self.assertTrue(UserSettings.objects.filter(user=self.user).exists())
+
+    def test_update_report_time(self):
+        user_settings = UserSettings.objects.create(
+            user=self.user,
+            send_report=True,
+            report_time="00:00:00",
+        )
+        user_settings.report_time = "12:00:00"
+        user_settings.save()
+        self.assertEqual(str(user_settings), "testuser's settings")
+        self.assertTrue(UserSettings.objects.filter(user=self.user).exists())

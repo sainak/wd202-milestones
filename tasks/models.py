@@ -68,7 +68,7 @@ class Task(models.Model):
                 bulk_update_kwargs = {}
 
                 db_backend = settings.DATABASES[self._state.db]["ENGINE"].split(".")[-1]
-                if db_backend == "sqlite3":
+                if db_backend == "sqlite3":  # pragma: no cover
                     # https://www.sqlite.org/limits.html#max_sql_length
                     bulk_update_kwargs["batch_size"] = 500
 
@@ -78,7 +78,7 @@ class Task(models.Model):
 
 
 class TaskChange(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="changes")
     previous_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     new_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     changed_at = models.DateTimeField(auto_now_add=True)
