@@ -1,33 +1,50 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: check-yaml
+        stages: [commit]
       - id: end-of-file-fixer
+        stages: [commit]
       - id: trailing-whitespace
+        stages: [commit]
       - id: check-merge-conflict
+        stages: [commit]
   - repo: local
     hooks:
       - id: migrations-check
         language: system
-        name: Check for uncreated migrations.
+        name: check for uncreated migrations.
         entry: bash -c "pipenv run ./manage.py makemigrations --check --dry-run"
         types: ["python"]
         pass_filenames: false
+        stages: [commit]
   - repo: https://github.com/PyCQA/isort
-    rev: 5.9.3
+    rev: 5.10.1
     hooks:
       - id: isort
-        name: Sort imports
+        name: sort imports
         args: [--profile=black]
+        stages: [commit]
   - repo: https://github.com/psf/black
-    rev: 21.9b0
+    rev: 22.1.0
     hooks:
       - id: black
-        name: Format files
+        name: format files with black
+        stages: [commit]
   - repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
       - id: flake8
+        name: check Python code style
         args: ["--ignore=E203,E501"]
-        language_version: python3
+        stages: [commit]
+  - repo: local
+    hooks:
+      - id: tests
+        language: system
+        name: run tests
+        entry: bash -c "pipenv run ./manage.py test"
+        types: ["python"]
+        pass_filenames: false
+        stages: ["push"]
