@@ -63,10 +63,7 @@ def send_report_celery_task(self, user_id):
             logger.error(
                 f"send_report: Max retries exceeded for user [{user.id}]:{user.username}"
             )
-            # user.settings.last_report_sent_at = (
-            #     user.settings.last_report_sent_at - timedelta(days=1)
-            # )
-            # user.settings.save()
+            # Maybe do something here?
         raise self.retry(exc=e)
 
 
@@ -76,11 +73,8 @@ def fetch_user_settings():
     now = datetime.now().replace(tzinfo=ZoneInfo(settings.CELERY_TIMEZONE))
     users_configs_to_report = UserSettings.objects.filter(
         send_report=True,
-        report_time__range=(
-            (now - timedelta(seconds=30)).strftime("%H:%M:%S"),
-            (now + timedelta(seconds=30)).strftime("%H:%M:%S"),
-        ),
-        last_report_sent_at__lt=now - timedelta(minutes=2),
+        report_time__lte=(now + timedelta(seconds=30)).strftime("%H:%M:%S"),
+        last_report_sent_at__lt=now - timedelta(days=1),
     ).select_related("user")
 
     logger.info(f"fetch_user_settings: {len(users_configs_to_report)} users to report")
