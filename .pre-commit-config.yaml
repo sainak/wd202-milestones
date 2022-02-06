@@ -11,7 +11,7 @@ repos:
       - id: migrations-check
         language: system
         name: Check for uncreated migrations.
-        entry: bash -c ".venv/bin/python3 manage.py makemigrations --check --dry-run"
+        entry: bash -c "pipenv run ./manage.py makemigrations --check --dry-run"
         types: ["python"]
         pass_filenames: false
   - repo: https://github.com/PyCQA/isort
