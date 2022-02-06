@@ -106,7 +106,10 @@ db-shell: ## Access db shell.
 	@pipenv run ./manage.py dbshell
 
 test: ## Run tests.
-	@pipenv run ./manage.py test
+	@pipenv run coverage run manage.py test
+	@pipenv run coverage html
+	@pipenv run coverage xml
+
 
 lint: ## Lint code.
 	@echo "--> Formatting code"
