@@ -36,7 +36,9 @@ class Task(models.Model):
 
     def save(self, *args, **kwargs):
 
-        if self.status == "COMPLETED":
+        if self.status == "COMPLETED" or (
+            self.pk and self._previous_priority == self.priority
+        ):
             super().save(*args, **kwargs)
             return
 
