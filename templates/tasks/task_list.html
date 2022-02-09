@@ -46,7 +46,9 @@
         </h1>
         <div class="grid">
           <div class="text-lg text-black {{ task.completed|yesno:' text-red-600 line-through , text-black ' }}">
+            <a href="{% url 'tasks-detail' task.id %}">
             {{ task.title }}
+            </a>
           </div>
           <div class="text-gray-600 text-sm">
             {{ task.created_at }}
