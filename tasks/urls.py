@@ -24,10 +24,10 @@ web_urlpatterns = [
 ]
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register("task", TaskViewSet)
+router.register("task", TaskViewSet, basename="api-task")
 
 task_history = routers.NestedDefaultRouter(router, "task", lookup="task")
-task_history.register(r"history", TaskChangeViewSet, basename="task-history")
+task_history.register(r"history", TaskChangeViewSet, basename="api-task-history")
 
 api_urlpatterns = [
     path("", include(router.urls)),
