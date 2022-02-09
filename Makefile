@@ -38,6 +38,8 @@ init-dev: require-pipenv require-direnv ## Setup Dev environment.
 	@echo "--> Copying .envrc"
 	@yes n | cp -vipr sample.envrc .envrc
 	@direnv edit
+	@echo "--> Installing pre-commit hooks"
+	@pipenv run pre-commit install --hook-type pre-commit --hook-type pre-push
 
 init-db: ## Create database.
 	@echo "--> Creating database"
