@@ -1,5 +1,4 @@
 ignore:
-  - "*/migrations/*"
   - "*/tests/*"
   - "*/asgi.py"
   - "*/wsgi.py"

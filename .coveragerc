@@ -5,7 +5,6 @@ source = .
 
 [report]
 omit =
-  */migrations/*
   */tests/*
   */asgi.py
   */wsgi.py
