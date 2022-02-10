@@ -5,8 +5,7 @@ from celery import current_app, shared_task
 from celery.schedules import crontab
 from celery.utils.log import get_logger
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from django.db import transaction
 from django.db.models import Count
 
 from tasks.models import Task, UserSettings
@@ -27,7 +26,7 @@ def send_report(user):
     )
 
     # TODO: use template to make this beautiful and add unsubscribe link
-    report = f"Hi {user.username},\n\n"
+    report = f"Hi {user.get_full_name() or user.username},\n\n"
     if not status:
         report += "\nNo tasks to report today."
     else:
@@ -37,59 +36,41 @@ def send_report(user):
             _sc = s["count"]
             report += f"\n{_sn} task{'s'[:_sc^1]}: {_sc}"
 
-    send_mail("Daily Task Report", report, settings.EMAIL_HOST_USER, [user.email])
-
-
-@shared_task(
-    bind=True,
-    default_retry_delay=30,
-    max_retries=2,
-)
-def send_report_celery_task(self, user_id):
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        logger.error(f"send_report: User with id {user_id} does not exist")
-        return
-    try:
-        logger.info(f"send_report: Sending report to [{user.id}]:{user.username}")
-        send_report(user)
-    except Exception as e:
-        if self.request.retries < self.max_retries:
-            logger.error(
-                f"send_report: Failed to send report for user [{user.id}]:{user.username} retrying..."
-            )
-        else:
-            logger.error(
-                f"send_report: Max retries exceeded for user [{user.id}]:{user.username}"
-            )
-            # user.settings.last_report_sent_at = (
-            #     user.settings.last_report_sent_at - timedelta(days=1)
-            # )
-            # user.settings.save()
-        raise self.retry(exc=e)
+    user.email_user(
+        subject="Daily tasks report",
+        message=report,
+        from_email=settings.EMAIL_HOST_USER,
+    )
 
 
 @shared_task
 def fetch_user_settings():
     logger.info("fetch_user_settings: Started")
-    now = datetime.now().replace(tzinfo=ZoneInfo(settings.CELERY_TIMEZONE))
-    users_configs_to_report = UserSettings.objects.filter(
-        send_report=True,
-        report_time__range=(
-            (now - timedelta(seconds=30)).strftime("%H:%M:%S"),
-            (now + timedelta(seconds=30)).strftime("%H:%M:%S"),
-        ),
-        last_report_sent_at__lt=now - timedelta(minutes=2),
-    ).select_related("user")
+    now = datetime.now(tz=ZoneInfo(settings.CELERY_TIMEZONE))
 
-    logger.info(f"fetch_user_settings: {len(users_configs_to_report)} users to report")
-    for user_config in users_configs_to_report:
-        send_report_celery_task.delay(user_config.user.id)
-        user_config.last_report_sent_at = datetime.now().replace(
-            tzinfo=ZoneInfo(settings.CELERY_TIMEZONE)
+    users_configs_to_report = (
+        UserSettings.objects.filter(
+            send_report=True,
+            last_report_sent_at__lt=now - timedelta(days=1),
         )
-        user_config.save()
+        .select_related("user")
+        .select_for_update()
+    )
+
+    with transaction.atomic():
+        logger.info(
+            f"fetch_user_settings: {len(users_configs_to_report)} users to report"
+        )
+        for user_config in users_configs_to_report:
+            logger.info(
+                f"fetch_user_settings: Sending report to [{user_config.user.id}]:{user_config.user.username}"
+            )
+            send_report(user_config.user)
+            user_config.last_report_sent_at = now.replace(
+                hour=user_config.report_time.hour,
+                minute=user_config.report_time.minute,
+            )
+            user_config.save()
 
 
 @current_app.on_after_finalize.connect

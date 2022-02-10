@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from django.utils.timezone import now
+from django.utils.timezone import get_default_timezone, now, timedelta
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -99,6 +99,16 @@ class UserSettings(models.Model):
         return f"{self.user.username}'s settings"
 
     def save(self, *args, **kwargs):
-        if not self.last_report_sent_at:
-            self.last_report_sent_at = now()
+        if self.send_report:
+            current_time = now().replace(tzinfo=get_default_timezone())
+            report_time = current_time.replace(
+                hour=self.report_time.hour, minute=self.report_time.minute, second=0
+            )
+            if (
+                not self.last_report_sent_at
+                or self.last_report_sent_at <= report_time - timedelta(days=1)
+            ):
+                self.last_report_sent_at = report_time - timedelta(days=1)
+            else:
+                self.last_report_sent_at = report_time
         super().save(*args, **kwargs)
