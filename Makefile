@@ -108,9 +108,13 @@ db-shell: ## Access db shell.
 	@pipenv run ./manage.py dbshell
 
 test: ## Run tests.
-	@pipenv run coverage run manage.py test
+	@echo "--> Running tests"
+	@pipenv run coverage erase
+	@-pipenv run coverage run manage.py test --parallel=$(shell nproc)
+	@pipenv run coverage combine > /dev/null
 	@pipenv run coverage html
 	@pipenv run coverage xml
+	@pipenv run coverage report
 
 
 lint: ## Lint code.
