@@ -1,3 +1,5 @@
+from datetime import time
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -106,7 +108,6 @@ class UserSettingsModelTests(TestCase):
         user_settings = UserSettings.objects.create(
             user=self.user,
             send_report=True,
-            report_time="00:00:00",
         )
         self.assertEqual(str(user_settings), "testuser's settings")
         self.assertTrue(UserSettings.objects.filter(user=self.user).exists())
@@ -115,9 +116,8 @@ class UserSettingsModelTests(TestCase):
         user_settings = UserSettings.objects.create(
             user=self.user,
             send_report=True,
-            report_time="00:00:00",
         )
-        user_settings.report_time = "12:00:00"
+        user_settings.report_time = time(12, 0, 0)
         user_settings.save()
         self.assertEqual(str(user_settings), "testuser's settings")
         self.assertTrue(UserSettings.objects.filter(user=self.user).exists())
