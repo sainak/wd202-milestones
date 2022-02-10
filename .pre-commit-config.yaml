@@ -15,36 +15,40 @@ repos:
       - id: migrations-check
         language: system
         name: check for uncreated migrations.
-        entry: bash -c "pipenv run ./manage.py makemigrations --check --dry-run"
+        entry: pipenv run ./manage.py makemigrations --check --dry-run
         types: ["python"]
         pass_filenames: false
         stages: [commit]
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+  - repo: local
     hooks:
       - id: isort
+        language: system
         name: sort imports
-        args: [--profile=black]
+        entry: pipenv run isort
+        types: ["python"]
         stages: [commit]
-  - repo: https://github.com/psf/black
-    rev: 22.1.0
+  - repo: local
     hooks:
       - id: black
+        language: system
         name: format files with black
+        entry: pipenv run black
+        types: ["python"]
         stages: [commit]
-  - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+  - repo: local
     hooks:
       - id: flake8
+        language: system
         name: check Python code style
-        args: ["--ignore=E203,E501"]
+        entry: pipenv run flake8
+        types: ["python"]
         stages: [commit]
   - repo: local
     hooks:
       - id: tests
         language: system
         name: run tests
-        entry: bash -c "pipenv run ./manage.py test"
+        entry: pipenv run ./manage.py test
         types: ["python"]
         pass_filenames: false
         stages: ["push"]

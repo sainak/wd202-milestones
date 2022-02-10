@@ -17,6 +17,7 @@ ipython = "*"
 pre-commit = "*"
 black = "*"
 isort = "*"
+flake8 = "*"
 coverage = "*"
 selenium = "*"
 
