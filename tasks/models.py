@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, transaction
 from django.utils.timezone import get_default_timezone, now, timedelta
+from datetime import time
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -90,7 +91,7 @@ class TaskChange(models.Model):
 class UserSettings(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="settings")
     send_report = models.BooleanField(default=False)
-    report_time = models.TimeField(default="00:00:00")
+    report_time = models.TimeField(default=time(0,0,0))
     last_report_sent_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
