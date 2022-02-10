@@ -52,10 +52,8 @@ class Task(models.Model):
                 priority__gte=clashing_priority,
                 deleted=False,
             )
-            .exclude(
-                id=self.id,
-                status="COMPLETED",
-            )
+            .exclude(id=self.id)
+            .exclude(status="COMPLETED")
             .select_for_update()
             .order_by("priority")
         )
