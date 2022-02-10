@@ -7,4 +7,4 @@ class UserModelTest(TestCase):
         User.objects.create_user(
             username="testuser", email="test@test.com", password="testpassword"
         )
-        assert User.objects.filter(username="testuser").exists()
+        self.assertTrue(User.objects.filter(username="testuser").exists())
