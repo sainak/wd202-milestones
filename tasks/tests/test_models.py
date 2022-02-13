@@ -1,7 +1,8 @@
-from datetime import time
+from datetime import time, timedelta
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.timezone import localtime
 
 from tasks.models import Task, TaskChange, UserSettings
 
@@ -119,5 +120,21 @@ class UserSettingsModelTests(TestCase):
         )
         user_settings.report_time = time(12, 0, 0)
         user_settings.save()
-        self.assertEqual(str(user_settings), "testuser's settings")
-        self.assertTrue(UserSettings.objects.filter(user=self.user).exists())
+        self.assertEqual(
+            UserSettings.objects.get(user=self.user).report_time, time(12, 0, 0)
+        )
+        self.assertEqual(
+            UserSettings.objects.get(user=self.user).last_report_sent_at.date(),
+            localtime().date() - timedelta(days=1),
+        )
+
+    def test_update_report_time_after_reported_today(self):
+        user_settings = UserSettings.objects.create(
+            user=self.user, send_report=True, last_report_sent_at=localtime()
+        )
+        user_settings.report_time = time(12, 0, 0)
+        user_settings.save()
+        self.assertEqual(
+            UserSettings.objects.get(user=self.user).last_report_sent_at.date(),
+            localtime().date(),
+        )
