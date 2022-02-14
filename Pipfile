@@ -11,6 +11,7 @@ drf-nested-routers = "*"
 django-tailwind = "*"
 celery = "*"
 redis = "*"
+gunicorn = "*"
 
 [dev-packages]
 ipython = "*"
