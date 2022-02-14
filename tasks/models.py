@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.db import models, transaction
 from django.utils.timezone import localtime, timedelta
 
+from tasks.mixins import PreserveInitialFieldValueMixin
+
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
     ("IN_PROGRESS", "IN_PROGRESS"),
@@ -13,10 +15,9 @@ STATUS_CHOICES = (
 )
 
 
-class Task(models.Model):
+class Task(PreserveInitialFieldValueMixin, models.Model):
 
-    _previous_priority = None
-    _previous_status = None
+    _preserved_fields = ("priority", "status")
 
     title = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,18 +29,13 @@ class Task(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._previous_priority = self.priority
-        self._previous_status = self.status
-
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
 
         if self.status == "COMPLETED" or (
-            self.pk and self._previous_priority == self.priority
+            self.pk and self._initial_priority == self.priority
         ):
             super().save(*args, **kwargs)
             return

@@ -9,9 +9,9 @@ def task_status_changed(sender, instance, created, raw, **kwargs):
     if created or raw:
         return
 
-    if instance._previous_status != instance.status:
+    if instance._initial_status != instance.status:
         TaskChange.objects.create(
             task=instance,
-            previous_status=instance._previous_status,
+            previous_status=instance._initial_status,
             new_status=instance.status,
         )
