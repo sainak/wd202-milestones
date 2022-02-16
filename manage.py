@@ -28,7 +28,7 @@ def main():
             sys.exit(1)
         multiprocessing.set_start_method("fork")
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "task_manager.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "task_manager.settings.local")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

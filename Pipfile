@@ -12,6 +12,9 @@ django-tailwind = "*"
 celery = "*"
 redis = "*"
 gunicorn = "*"
+django-environ = "*"
+sentry-sdk = "*"
+whitenoise = "*"
 
 [dev-packages]
 ipython = "*"
