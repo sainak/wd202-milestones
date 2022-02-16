@@ -1,8 +1,8 @@
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from task_manager.mixins import ObjectOwnerMixin
 from tasks.filters import TaskChangeFilter, TaskFilter
-from tasks.mixins import ObjectOwnerMixin
 from tasks.models import Task, TaskChange
 from tasks.serializers import TaskChangeSerializer, TaskSerializer
 

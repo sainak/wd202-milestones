@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models, transaction
 from django.utils.timezone import localtime, timedelta
 
-from tasks.mixins import PreserveInitialFieldValueMixin
+from task_manager.mixins import PreserveInitialFieldValueMixin
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),

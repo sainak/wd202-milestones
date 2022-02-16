@@ -10,9 +10,9 @@ from django.views.generic import (
 )
 from django_filters.views import FilterView
 
+from task_manager.mixins import ObjectOwnerMixin
 from tasks.filters import TaskFilter
 from tasks.forms import TaskForm, UserSettingsForm
-from tasks.mixins import ObjectOwnerMixin
 from tasks.models import Task, TaskChange, UserSettings
 
 
