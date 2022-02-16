@@ -79,7 +79,7 @@ su: ## Create superuser.
 	@pipenv run ./manage.py createsuperuser
 
 r run: ## Runserver.
-	@pipenv run ./manage.py runserver
+	@pipenv run  ./manage.py runserver 0.0.0.0:8000
 
 tw: ## Start django-tailwind build server.
 	@pipenv run ./manage.py tailwind start

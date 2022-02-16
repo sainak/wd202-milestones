@@ -3,6 +3,8 @@ from .base import env
 
 DEBUG = True
 
+ALLOWED_HOSTS = ["*"]
+
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="django-insecure-hn4*^-v@9xjaxl&+-1u$hrl*d5wn^&j5_ir%18$-j2z@77u-g6",
