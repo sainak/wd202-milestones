@@ -35,8 +35,9 @@ loaddata: ## Load data from most recent db dump
 init-dev: require-pipenv require-direnv ## Setup Dev environment.
 	@echo "--> Initializing"
 	@pipenv install --dev
-	@echo "--> Copying .envrc"
-	@yes n | cp -vipr sample.envrc .envrc
+	@echo "--> Copying .env files"
+	@cp -n sample.envrc .envrc
+	@cp -n sample.env .env
 	@direnv edit
 	@echo "--> Installing pre-commit hooks"
 	@pipenv run pre-commit install --hook-type pre-commit --hook-type pre-push
