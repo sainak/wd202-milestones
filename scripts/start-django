@@ -5,6 +5,8 @@ set -o pipefail
 set -o nounset
 
 python /app/manage.py migrate --noinput
+python /app/manage.py tailwind install
+python /app/manage.py tailwind build
 python /app/manage.py collectstatic --noinput
 
 /usr/local/bin/gunicorn task_manager.wsgi --bind 0.0.0.0:8000 --chdir=/app

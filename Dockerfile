@@ -38,8 +38,5 @@ FROM base AS app
 
 COPY --chown=web:web . ${APP_HOME}
 
-RUN python ./manage.py tailwind install \
-  python ./manage.py tailwind build
-
 COPY --chown=web:web ./scripts /app
 RUN chmod +x start-celery-worker start-celery-beat start-django
