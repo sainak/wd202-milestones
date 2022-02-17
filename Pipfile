@@ -15,7 +15,7 @@ gunicorn = "*"
 django-environ = "*"
 sentry-sdk = "*"
 whitenoise = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 ipython = "*"
