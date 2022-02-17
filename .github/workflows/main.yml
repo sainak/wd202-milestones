@@ -52,16 +52,13 @@ jobs:
           # ghcr.io/${{ github.repository }}:latest
           push: ${{ github.ref == 'refs/heads/deploy' }}
 
-      # - name: Prune
-      #   if: github.ref == 'refs/heads/deploy'
-      #   uses: vlaurin/action-ghcr-prune@main
-      #   with:
-      #     token: "${{ secrets.CR_PAT }}"
-      #     organization: ${{ github.repository_owner }}
-      #     container: ${{ github.event.repository.name }}
-      #     dry-run: false
-      #     older-than: 7
-      #     keep-last: 2
+      - uses: snok/container-retention-policy@v1
+        with:
+          image-names: task-manager
+          token: ${{ secrets.CR_PAT }}
+          account-type: personal
+          skip-tags: latest
+          keep-at-least: 2
 
   deploy:
     if: github.ref == 'refs/heads/deploy'
@@ -79,10 +76,17 @@ jobs:
       - name: Install caprover
         run: npm install -g caprover
 
+      - name: Login to Github Packages
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+
       - name: Deploy images
         run: |
           caprover deploy --imageName $IMAGE --caproverApp todo
           caprover deploy --imageName $IMAGE --caproverApp todo-beat
           caprover deploy --imageName $IMAGE --caproverApp todo-worker
         env:
-          IMAGE: https://ghcr.io/sainak/task-manager:latest
+          IMAGE: ghcr.io/sainak/task-manager:latest

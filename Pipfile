@@ -16,6 +16,7 @@ django-environ = "*"
 sentry-sdk = "*"
 whitenoise = "*"
 psycopg2-binary = "*"
+django-anymail = {extras = ["mailgun"], version = "*"}
 
 [dev-packages]
 ipython = "*"
