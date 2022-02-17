@@ -33,27 +33,35 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
   build:
-    if: github.ref == 'refs/heads/deploy'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: Login to Github Packages
+        uses: docker/login-action@v1
         with:
-          username: ${{ github.repository_owner }}
-          password: "${{ secrets.CR_PAT }}"
           registry: ghcr.io
-          image_name: ${{ github.event.repository.name }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
 
-      - name: Prune
-        uses: vlaurin/action-ghcr-prune@main
+      - name: Build image and push GitHub Container Registry
+        uses: docker/build-push-action@v2
         with:
-          token: "${{ secrets.CR_PAT }}"
-          organization: ${{ github.repository_owner }}
-          container: ${{ github.event.repository.name }}
-          dry-run: false
-          older-than: 7
-          keep-last: 2
+          tags: |
+            ghcr.io/sainak/task-manager:latest
+          # ghcr.io/${{ github.repository }}:latest
+          push: ${{ github.ref == 'refs/heads/deploy' }}
+
+      # - name: Prune
+      #   if: github.ref == 'refs/heads/deploy'
+      #   uses: vlaurin/action-ghcr-prune@main
+      #   with:
+      #     token: "${{ secrets.CR_PAT }}"
+      #     organization: ${{ github.repository_owner }}
+      #     container: ${{ github.event.repository.name }}
+      #     dry-run: false
+      #     older-than: 7
+      #     keep-last: 2
 
   deploy:
     if: github.ref == 'refs/heads/deploy'
@@ -77,4 +85,4 @@ jobs:
           caprover deploy --imageName $IMAGE --caproverApp todo-beat
           caprover deploy --imageName $IMAGE --caproverApp todo-worker
         env:
-          IMAGE: https://ghcr.io/${{ github.repository }}:latest
+          IMAGE: https://ghcr.io/sainak/task-manager:latest
