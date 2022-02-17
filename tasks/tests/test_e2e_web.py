@@ -1,8 +1,7 @@
-from datetime import time
-
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
+from django.utils.timezone import localtime
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
 
@@ -248,5 +247,6 @@ class UserSettingsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//button[@type="submit"]').click()
 
         self.assertEqual(
-            UserSettings.objects.get(user=self.user).report_time, time(11, 0, 0)
+            localtime(UserSettings.objects.get(user=self.user).report_time).time(),
+            localtime().replace(hour=11, minute=0, second=0, microsecond=0).time(),
         )

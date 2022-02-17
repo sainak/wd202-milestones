@@ -1,8 +1,6 @@
-from datetime import time, timedelta
-
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.utils.timezone import localtime
+from django.utils.timezone import localtime, timedelta
 
 from tasks.models import Task, UserSettings
 from tasks.tasks import fetch_user_settings, send_report
@@ -16,7 +14,7 @@ class CeleryTasksTest(TestCase):
         self.user_settings = UserSettings.objects.create(
             user=self.user,
             send_report=True,
-            report_time=time(8, 0, 0),
+            report_time=localtime().replace(hour=8, minute=0, second=0),
             last_report_sent_at=localtime() - timedelta(days=2),
         )
 

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.timezone import localtime
 
 from tasks.forms import TaskForm, UserSettingsForm
 from tasks.models import Task, UserSettings
@@ -56,10 +57,7 @@ class UserSettingsFormTests(TestCase):
 
     def test_valid_user_settings_form(self):
         form = UserSettingsForm(
-            data={
-                "send_report": True,
-                "report_time": "00:00:00",
-            }
+            data={"send_report": True, "report_time": localtime(), "timezone": "UTC"}
         )
         self.assertTrue(form.is_valid())
 
@@ -75,7 +73,10 @@ class UserSettingsFormTests(TestCase):
         form = UserSettingsForm(
             data={
                 "send_report": True,
-                "report_time": "00:00:00",
+                "timezone": "UTC",
+                "report_time": localtime().replace(
+                    hour=0, minute=0, second=0, microsecond=0
+                ),
             }
         )
         form.instance.user = self.user

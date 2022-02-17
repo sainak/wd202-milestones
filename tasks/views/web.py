@@ -88,3 +88,9 @@ class UserSettingsView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return UserSettings.objects.get_or_create(user=self.request.user)[0]
+
+    def form_valid(self, form):
+        tz = self.request.session.get("django_timezone")
+        if not tz or form.instance.timezone != tz:
+            self.request.session["django_timezone"] = form.instance.timezone
+        return super().form_valid(form)

@@ -49,7 +49,7 @@ def send_report(user):
 @shared_task
 def fetch_user_settings():
     logger.info("fetch_user_settings: Started")
-    now = datetime.now(tz=ZoneInfo(settings.CELERY_TIMEZONE))
+    now = datetime.now(ZoneInfo(settings.CELERY_TIMEZONE))
 
     users_configs_to_report = (
         UserSettings.objects.filter(
