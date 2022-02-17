@@ -16,18 +16,18 @@ ENV BUILD_ENV=${BUILD_ENV} \
 
 RUN apk update \
   && apk upgrade \
-  && apk add --no-cache postgresql-dev
+  && apk add --no-cache postgresql-dev npm
 
 RUN python -m pip install --upgrade pipenv wheel
 
 WORKDIR ${APP_HOME}
 
-RUN groupadd -r web && useradd -d ${APP_HOME} -r -g web web \
+RUN addgroup -S web && adduser -h ${APP_HOME} -S web web \
   && chown web:web -R ${APP_HOME} \
   && mkdir -p /var/www/django/static /var/www/django/media \
   && chown web:web /var/www/django/static /var/www/django/media
 
-COPY --chown=web:web ./Pipenv ./Pipenv.lock ${APP_HOME}
+COPY --chown=web:web ./Pipfile ./Pipfile.lock ${APP_HOME}/
 
 RUN pipenv install --system --deploy --ignore-pipfile --clear
 
@@ -38,5 +38,9 @@ FROM base AS app
 
 COPY --chown=web:web . ${APP_HOME}
 
-COPY --chown=web:web ./scripts /app
+COPY --chown=web:web ./scripts ${APP_HOME}
 RUN chmod +x start-celery-worker start-celery-beat start-django
+
+EXPOSE 8000
+
+CMD ["/bin/sh"]
