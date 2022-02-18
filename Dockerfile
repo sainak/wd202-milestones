@@ -38,9 +38,8 @@ FROM base AS app
 
 COPY --chown=web:web . ${APP_HOME}
 
-COPY --chown=web:web ./scripts ${APP_HOME}
-RUN chmod +x start-celery-worker start-celery-beat start-django
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["/bin/sh"]
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
