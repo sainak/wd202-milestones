@@ -52,14 +52,6 @@ jobs:
           # ghcr.io/${{ github.repository }}:latest
           push: ${{ github.ref == 'refs/heads/deploy' }}
 
-      - uses: snok/container-retention-policy@v1
-        with:
-          image-names: task-manager
-          token: ${{ secrets.CR_PAT }}
-          account-type: personal
-          skip-tags: latest
-          keep-at-least: 2
-
   deploy:
     if: github.ref == 'refs/heads/deploy'
     runs-on: ubuntu-latest
