@@ -16,6 +16,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
 # for docker container
 STATIC_ROOT = "/var/www/django/static"
 MEDIA_ROOT = "/var/www/django/media"
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
@@ -45,6 +46,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 )
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
     default="Todo Manager <noreply@example.com>",
